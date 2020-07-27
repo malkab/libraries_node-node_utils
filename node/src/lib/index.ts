@@ -1,5 +1,7 @@
-export * from "./ts-utils-hashing";
+export * from "./nodeutilshashing";
 
-export * from "./ts-utils-docker";
+export * from "./nodeutilsdocker";
+
+export * from "./nodeutilsfiles";
 
 export * from "./idockerinfo";

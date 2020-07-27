@@ -10,7 +10,7 @@ import { IDockerInfo } from "./idockerinfo";
  * Docker containers in multi-services deployment (like worker pools).
  * 
  */
-export namespace TsUtilsDocker {
+export namespace NodeUtilsDocker {
 
   /**
    * 
