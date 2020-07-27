@@ -4,7 +4,7 @@ import * as uid from "uid-generator";
 
 import { hashSync as bcryptHash } from "bcryptjs";
 
-export namespace TsUtilsHashing {
+export namespace NodeUtilsHashing {
 
   /**
    * 
