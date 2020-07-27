@@ -1,0 +1,9 @@
+name: node-utils
+root: /home/git/malkab-libraries-node/node-utils
+
+windows:
+        
+  - docker-dev: 
+      cd docker ; 
+      sleep 0.5 ; 
+      clear
