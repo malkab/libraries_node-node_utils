@@ -1,69 +1,66 @@
 #!/bin/bash
 
+# Version: 2020-08-19
+
 # -----------------------------------------------------------------
 #
-# Interactive Node session for development.
+# Runs the Node dev env.
 #
 # -----------------------------------------------------------------
 #
-# Runs Node environment. Good for interactive use for 
-# data science or Node / Express programs, and also for
-# Angular frontend development.
-#  
+# Runs Node environment. Good for interactive use for data science or Node /
+# Express programs, and also for Angular frontend development.
+#
 # -----------------------------------------------------------------
 
-# Check mlk-context to check. If void, no check will be performed
+# Check mlk-context to check. If void, no check will be performed.
 MATCH_MLKCONTEXT=
-# Node image version
+# Node image version.
 NODE_VERSION=12.16.3
-# Env mode: production / development
+# Env mode: production / development.
 NODE_ENV=development
-# Node memory
+# Node memory.
 NODE_MEMORY=2GB
-# Null for an interactive shell session, the EXEC is passed to /bin/bash
-# with the -c option. Can be used to run Node scripts with 
-# "node whatever" or run npm targets with "npm run whatever"
+# Null for an interactive shell session, the EXEC is passed to /bin/bash with
+# the -c option. Can be used to run Node scripts with "node whatever" or run npm
+# targets with "npm run whatever".
 EXEC=
-# The network to connect to. Remember that when attaching to the network
-# of an existing container (using container:name) the HOST is
-# "localhost"
+# The network to connect to. Remember that when attaching to the network of an
+# existing container (using container:name) the HOST is "localhost".
 NETWORK=
-# Jupyter mode: runs a Jupyter server with Javascript support if a 
-# version with this capability is used
-# Jupyter exports automatically the 8888 port
+# Jupyter mode: runs a Jupyter server with Javascript support if a version with
+# this capability is used. Jupyter exports automatically the 8888 port.
 JUPYTER=false
-# Container name
+# Container name.
 CONTAINER_NAME=node_utils_dev
-# Container host name
+# Container host name. Incompatible with NETWORK=container:XXX.
 CONTAINER_HOST_NAME=node_utils_dev
-# A set of volumes in the form ("source:destination" 
-# "source:destination"). Most of the times the src folder of the Node
-# source code base is replicated inside the container with the same
-# path so build systems works as expected (see second line as example).
-# Also this tend to be the WORKDIR
-# As default, the user local .npmrc is also included as a volume, so
-# login permissions to private repos are shared with the container
+# A set of volumes in the form ("source:destination" "source:destination"). Most
+# of the times the src folder of the Node source code base is replicated inside
+# the container with the same path so build systems works as expected (see
+# second line as example). Also this tend to be the WORKDIR As default, the user
+# local .npmrc is also included as a volume, so login permissions to private
+# repos are shared with the container.
 VOLUMES=(
   $(pwd):/ext_src
   $(pwd)/../node/:$(pwd)/../node/
   ~/.npmrc:/root/.npmrc
   ~/.npmrc:/home/node/.npmrc
 )
-# Volatile (-ti --rm)
+# Volatile (-ti --rm).
 VOLATILE=true
-# Open ports in the form (external:internal external:internal)
-# Ports 9229 and 9329 are typically container-level assigned
-# port for remote debuggers
-# Port 8080 is typically assigned at container-level to an Express
-# app entrypoint
-# Angular applications traditionally export port 4200
+# Open ports in the form (external:internal external:internal). Ports 9229 and
+# 9329 are typically container-level assigned port for remote debuggers. Port
+# 8080 is typically assigned at container-level to an Express app entrypoint.
+# Angular applications traditionally export port 4200. Incompatible with
+# NETWORK=container:XXX.
 PORTS=(
   9011:9229
   9012:9329
 )
-# Custom entrypoint
+# Custom entrypoint.
 ENTRYPOINT=/bin/bash
-# Custom workdir
+# Custom workdir.
 WORKDIR=$(pwd)/../node/
 # Use display for X11 host server?
 X11=false
@@ -75,7 +72,6 @@ X11=false
 # ---
 
 # Check mlkcontext
-
 if [ ! -z "${MATCH_MLKCONTEXT}" ] ; then
 
   if [ ! "$(mlkcontext)" = "$MATCH_MLKCONTEXT" ] ; then
@@ -88,18 +84,15 @@ if [ ! -z "${MATCH_MLKCONTEXT}" ] ; then
 
 fi
 
-
 if [ ! -z "${EXEC}" ]; then COMMAND="-c \"${EXEC}\"" ; fi
 
-
-if [ ! -z "${NETWORK}" ] ; then 
+if [ ! -z "${NETWORK}" ] ; then
 
   NETWORK="--network=${NETWORK}"
-  
+
 fi
 
-
-if [ "${X11}" = true ] ; then 
+if [ "${X11}" = true ] ; then
 
   X11="-e DISPLAY=host.docker.internal:0"
 
@@ -112,34 +105,29 @@ else
 
 fi
 
-
-if [ ! -z "${CONTAINER_NAME}" ] ; then 
+if [ ! -z "${CONTAINER_NAME}" ] ; then
 
   CONTAINER_NAME="--name=${CONTAINER_NAME}"
-  
-fi
 
+fi
 
 if [ ! -z "${CONTAINER_HOST_NAME}" ] ; then
 
   CONTAINER_HOST_NAME="--hostname=${CONTAINER_HOST_NAME}"
-  
+
 fi
 
-
-if [ ! -z "${ENTRYPOINT}" ] ; then 
+if [ ! -z "${ENTRYPOINT}" ] ; then
 
   ENTRYPOINT="--entrypoint ${ENTRYPOINT}"
-    
+
 fi
 
-
-if [ ! -z "${WORKDIR}" ] ; then 
+if [ ! -z "${WORKDIR}" ] ; then
 
   WORKDIR="--workdir ${WORKDIR}"
 
 fi
-
 
 VOLUMES_F=
 
@@ -153,7 +141,6 @@ if [ ! -z "${VOLUMES}" ] ; then
 
 fi
 
-
 PORTS_F=
 
 if [ ! -z "${PORTS}" ] ; then
@@ -166,14 +153,12 @@ if [ ! -z "${PORTS}" ] ; then
 
 fi
 
-
-if [ "$JUPYTER" = true ] ; then 
+if [ "$JUPYTER" = true ] ; then
 
   COMMAND="-c \"jupyter notebook --ip 0.0.0.0 --allow-root\""
   PORTS_F="${PORTS_F} -p 8888:8888 "
 
 fi
-
 
 if [ "$VOLATILE" = true ] ; then
 
@@ -184,7 +169,6 @@ else
   DOCKER_COMMAND="docker run -ti"
 
 fi
-
 
 eval  $DOCKER_COMMAND \
         -e "NODE_ENV=${NODE_ENV}" \

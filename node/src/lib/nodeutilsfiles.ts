@@ -4,23 +4,29 @@ import * as path from "path";
 
 import * as rx from "rxjs";
 
+import * as rxo from "rxjs/operators";
+
 import * as child_process from "child_process";
 
+import * as roundTo from "round-to";
+
+const getFolderSizeFunction: any = require("get-folder-size");
+
 /**
- * 
- * Filesystem's utils
- * 
+ *
+ * Filesystem's utils.
+ *
  */
 export namespace NodeUtilsFiles {
 
   /**
-   * 
+   *
    * Writes a TXT to file.
-   * 
+   *
    * @param   filePathName      The path of the file to be written
    *                            inside the folder of FEE.
    * @param   json              The JSON to write.
-   * 
+   *
    */
   export function writeTxt$(
     filePath: string[],
@@ -33,16 +39,10 @@ export namespace NodeUtilsFiles {
 
       fs.writeFile(p, txt, { encoding: "utf-8" }, (err: any) => {
 
-        if (err) {
-          
-          o.error(err);
+        if (err) { o.error(err); }
 
-        } else {
-
-          o.next(true);
-          o.complete();
-
-        }
+        o.next(true);
+        o.complete();
 
       });
 
@@ -51,15 +51,15 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Writes a JSON to file.
-   * 
+   *
    * @param   filePathName      The path of the file to be written
    *                            inside the folder of FEE.
    * @param   json              The JSON to write.
    * @param   beautifySpaces    Set different to null to output
    *                            a beautiful JSON.
-   * 
+   *
    */
   export function writeTxtSync(
     filePath: string[],
@@ -73,35 +73,29 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Writes a JSON to file.
-   * 
+   *
    * @param   filePathName      The path of the file to be written
    *                            inside the folder of FEE.
    * @param   json              The JSON to write.
    * @param   beautifySpaces    Set different to null to output
    *                            a beautiful JSON.
-   * 
+   *
    */
-  export function readJson$(...filePath: string[]): 
+  export function readJson$(...filePath: string[]):
   rx.Observable<any> {
 
     return new rx.Observable<boolean>((o: any) => {
 
       const p: string = path.join(...filePath);
 
-      fs.readFile(p, (err: any, data: any) => { 
-  
-        if (err) {
-            
-            o.error(err);
+      fs.readFile(p, (err: any, data: any) => {
 
-        } else {
+        if (err) { o.error(err); }
 
-          o.next(JSON.parse(data));
-          o.complete();
-
-        }
+        o.next(JSON.parse(data));
+        o.complete();
 
       });
 
@@ -110,9 +104,9 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Reads a JSON file.
-   * 
+   *
    */
   export function readJsonSync(...filePath: string[]): void {
 
@@ -121,15 +115,15 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Writes a JSON to file.
-   * 
+   *
    * @param   filePathName      The path of the file to be written
    *                            inside the folder of FEE.
    * @param   json              The JSON to write.
    * @param   beautifySpaces    Set different to null to output
    *                            a beautiful JSON.
-   * 
+   *
    */
   export function writeJson$(
     filePath: string[],
@@ -141,19 +135,13 @@ export namespace NodeUtilsFiles {
 
       const p: string = path.join(...filePath);
 
-      fs.writeFile(p, JSON.stringify(json, null, 
+      fs.writeFile(p, JSON.stringify(json, null,
         beautifySpaces), { encoding: "utf-8" }, (err: any) => {
 
-          if (err) {
-            
-            o.error(err);
+          if (err) { o.error(err); }
 
-          } else {
-
-            o.next(true);
-            o.complete();
-
-          }
+          o.next(true);
+          o.complete();
 
         });
 
@@ -162,13 +150,13 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Writes a JSON to file.
-   * 
+   *
    * @param   filePathName      The path of the file to be written
    *                            inside the folder of FEE.
    * @param   json              The JSON to write.
-   * 
+   *
    */
   export function writeJsonSync(
     filePath: string[],
@@ -178,17 +166,17 @@ export namespace NodeUtilsFiles {
 
     const p: string = path.join(...filePath);
 
-    fs.writeFileSync(p, JSON.stringify(json, null, 
+    fs.writeFileSync(p, JSON.stringify(json, null,
       beautifySpaces), { encoding: "utf-8" });
 
   }
 
   /**
-   * 
+   *
    * Deletes a file.
-   * 
+   *
    * @param filePath    The file path and name.
-   * 
+   *
    */
   export function deleteFile$(...filePath: string[]): rx.Observable<boolean> {
 
@@ -198,16 +186,10 @@ export namespace NodeUtilsFiles {
 
       fs.unlink(p, (err: any) => {
 
-        if (err) {
-            
-          o.error(err);
+        if (err) { o.error(err); }
 
-        } else {
-
-          o.next(true);
-          o.complete();
-
-        }
+        o.next(true);
+        o.complete();
 
       });
 
@@ -216,11 +198,11 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Deletes a file.
-   * 
+   *
    * @param filePath    The file path and name.
-   * 
+   *
    */
   export function deleteFileSync(...filePath: string[]): void {
 
@@ -231,31 +213,25 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Deletes a folder.
-   * 
+   *
    * @param folderPath    The file path and name.
-   * 
+   *
    */
-  export function deleteFolder$(folderPath: string[]): 
+  export function deleteFolder$(folderPath: string[]):
   rx.Observable<boolean> {
 
     return new rx.Observable<boolean>((o: any) => {
 
       const p: string = path.join(...folderPath);
 
-      fs.remove(p, (err: any) => {
+      fs.remove(p, (error: any) => {
 
-        if (err) {
-            
-          o.error(err);
+        if (error) { o.error(error); }
 
-        } else {
-
-          o.next(true);
-          o.complete();
-
-        }
+        o.next(true);
+        o.complete();
 
       });
 
@@ -264,11 +240,11 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Deletes a folder.
-   * 
+   *
    * @param folderPath    The file path and name.
-   * 
+   *
    */
   export function deleteFolderSync(folderPath: string[]): void {
 
@@ -279,15 +255,15 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Check path and create folder if it isn't exists, sync version.
-   * 
+   *
    * @param folders         The series of folders to create.
-   * @returns               The full path of the created folder, or 
+   * @returns               The full path of the created folder, or
    *                        null if it exits.
-   * 
+   *
    */
-  export function mkdir$(...folders: string[]): 
+  export function mkdir$(...folders: string[]):
   rx.Observable<string> {
 
     // Path
@@ -296,13 +272,10 @@ export namespace NodeUtilsFiles {
     // Observable
     return new rx.Observable<string>((o: any) => {
 
-      fs.mkdir(p, (err: any) => {
+      fs.mkdir(p, (error: any) => {
 
-        if (err) {
-
-          o.error(err);
-
-        }
+        // Drop if error
+        if (error) { o.error(error); }
 
         o.next(p);
         o.complete();
@@ -314,13 +287,13 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Check path and create folder if it isn't exists, sync version.
-   * 
+   *
    * @param folders         The series of folders to create.
-   * @returns               The full path of the created folder, or 
+   * @returns               The full path of the created folder, or
    *                        null if it exits.
-   * 
+   *
    */
   export function mkdirSync(...folders: string[]): void {
 
@@ -331,9 +304,9 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Duplicates a folder. Uses fs-extra.
-   * 
+   *
    */
   export function copy$(origin: string[], destination: string[]):
   rx.Observable<string> {
@@ -343,13 +316,10 @@ export namespace NodeUtilsFiles {
       const originP: string = path.join(...origin);
       const destinationP: string = path.join(...destination);
 
-      fs.copy(originP, destinationP, (err: any) => {
+      fs.copy(originP, destinationP, (error: any) => {
 
-        if (err) {
-
-          o.error(err);
-
-        }
+        // Drop if error
+        if (error) { o.error(error); }
 
         o.next(destinationP);
         o.complete();
@@ -361,9 +331,9 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Duplicates a folder. Uses fs-extra.
-   * 
+   *
    */
   export function copySync(origin: string[], destination: string[]): void {
 
@@ -375,15 +345,14 @@ export namespace NodeUtilsFiles {
   }
 
   /**
-   * 
+   *
    * Requires an installation of 7zip.
-   * 
-   * @param folder 
-   * @param zipFilePathName 
-   * 
+   *
+   * @param folder
+   * @param zipFilePathName
+   *
    */
-
-  export function zipFolder(folder: string[], zipFilePathName: string[]): 
+  export function zipFolder(folder: string[], zipFilePathName: string[]):
   rx.Observable<string> {
 
     const folderP: string = path.join(...folder);
@@ -391,10 +360,11 @@ export namespace NodeUtilsFiles {
 
     return new rx.Observable<string>((o: any) => {
 
-      child_process.exec(`7z a ${zipFilePathNameP} ${folderP}`, 
+      child_process.exec(`7z a ${zipFilePathNameP} ${folderP}`,
         (error: any, stdout: any, stderr: any) => {
 
-          if (error) { o.error(error) }
+          // Drop if error
+          if (error) { o.error(error); }
 
           o.next(zipFilePathNameP);
           o.complete();
@@ -402,6 +372,75 @@ export namespace NodeUtilsFiles {
         })
 
     })
+
+  }
+
+  /**
+   *
+   * Calculates the size of a single folder in bytes.
+   * Divide by 1024 twice to get megabytes.
+   *
+   */
+  export function getFolderSize(folder: string): rx.Observable<number> {
+
+    return new rx.Observable<number>((o: any) => {
+
+      getFolderSizeFunction(folder, (error: Error, size: number) => {
+
+        // Drop if error
+        if (error) { o.error(error); }
+
+        o.next(size);
+        o.complete();
+
+      })
+
+    })
+
+  }
+
+  /**
+   *
+   * Outputs a report about the size of several folders, in different sizes, in
+   * numerical and human readable form.
+   *
+   */
+  export function getFolderSizeReport(...folder: string[]): rx.Observable<any[]> {
+
+    return rx.zip(
+      ...folder.map((x: string) => {
+
+        return getFolderSize(x);
+
+      })
+    )
+    .pipe(
+
+      rxo.map((o: number[]) => {
+
+        let i: number = -1;
+
+        return o.map((x: number) => {
+
+          i += 1;
+
+          return {
+            folder: folder[i],
+            sizeBytes: x,
+            sizeBytesHuman: `${x} B`,
+            sizeKBytes: roundTo(x / 1024, 2),
+            sizeKBytesHuman: `${roundTo(x / 1024, 2)} KB`,
+            sizeMBytes: roundTo(x / 1024 / 1024, 2),
+            sizeMBytesHuman: `${roundTo(x / 1024 / 1024, 2)} MB`,
+            sizeGBytes: roundTo(x / 1024 / 1024 / 1024, 2),
+            sizeGBytesHuman: `${roundTo(x / 1024 / 1024 / 1024, 2)} GB`,
+          }
+
+        })
+
+      })
+
+    )
 
   }
 
