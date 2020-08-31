@@ -39,10 +39,16 @@ export namespace NodeUtilsFiles {
 
       fs.writeFile(p, txt, { encoding: "utf-8" }, (err: any) => {
 
-        if (err) { o.error(err); }
+        if (err) {
 
-        o.next(true);
-        o.complete();
+          o.error(err);
+
+        } else {
+
+          o.next(true);
+          o.complete();
+
+        }
 
       });
 
@@ -92,10 +98,16 @@ export namespace NodeUtilsFiles {
 
       fs.readFile(p, (err: any, data: any) => {
 
-        if (err) { o.error(err); }
+        if (err) {
 
-        o.next(JSON.parse(data));
-        o.complete();
+          o.error(err);
+
+        } else {
+
+          o.next(JSON.parse(data));
+          o.complete();
+
+        }
 
       });
 
@@ -138,10 +150,16 @@ export namespace NodeUtilsFiles {
       fs.writeFile(p, JSON.stringify(json, null,
         beautifySpaces), { encoding: "utf-8" }, (err: any) => {
 
-          if (err) { o.error(err); }
+          if (err) {
 
-          o.next(true);
-          o.complete();
+            o.error(err);
+
+          } else {
+
+            o.next(true);
+            o.complete();
+
+          }
 
         });
 
@@ -186,10 +204,16 @@ export namespace NodeUtilsFiles {
 
       fs.unlink(p, (err: any) => {
 
-        if (err) { o.error(err); }
+        if (err) {
 
-        o.next(true);
-        o.complete();
+          o.error(err);
+
+        } else {
+
+          o.next(true);
+          o.complete();
+
+        }
 
       });
 
@@ -226,12 +250,18 @@ export namespace NodeUtilsFiles {
 
       const p: string = path.join(...folderPath);
 
-      fs.remove(p, (error: any) => {
+      fs.remove(p, (err: any) => {
 
-        if (error) { o.error(error); }
+        if (err) {
 
-        o.next(true);
-        o.complete();
+          o.error(err);
+
+        } else {
+
+          o.next(true);
+          o.complete();
+
+        }
 
       });
 
@@ -272,13 +302,18 @@ export namespace NodeUtilsFiles {
     // Observable
     return new rx.Observable<string>((o: any) => {
 
-      fs.mkdir(p, (error: any) => {
+      fs.mkdir(p, (err: any) => {
 
-        // Drop if error
-        if (error) { o.error(error); }
+        if (err) {
 
-        o.next(p);
-        o.complete();
+          o.error(err);
+
+        } else {
+
+          o.next(p);
+          o.complete();
+
+        }
 
       })
 
@@ -316,13 +351,18 @@ export namespace NodeUtilsFiles {
       const originP: string = path.join(...origin);
       const destinationP: string = path.join(...destination);
 
-      fs.copy(originP, destinationP, (error: any) => {
+      fs.copy(originP, destinationP, (err: any) => {
 
-        // Drop if error
-        if (error) { o.error(error); }
+        if (err) {
 
-        o.next(destinationP);
-        o.complete();
+          o.error(err);
+
+        } else {
+
+          o.next(destinationP);
+          o.complete();
+
+        }
 
       });
 
@@ -361,13 +401,18 @@ export namespace NodeUtilsFiles {
     return new rx.Observable<string>((o: any) => {
 
       child_process.exec(`7z a ${zipFilePathNameP} ${folderP}`,
-        (error: any, stdout: any, stderr: any) => {
+        (err: any, stdout: any, stderr: any) => {
 
-          // Drop if error
-          if (error) { o.error(error); }
+          if (err) {
 
-          o.next(zipFilePathNameP);
-          o.complete();
+            o.error(err);
+
+          } else {
+
+            o.next(zipFilePathNameP);
+            o.complete();
+
+          }
 
         })
 
@@ -385,13 +430,18 @@ export namespace NodeUtilsFiles {
 
     return new rx.Observable<number>((o: any) => {
 
-      getFolderSizeFunction(folder, (error: Error, size: number) => {
+      getFolderSizeFunction(folder, (err: Error, size: number) => {
 
-        // Drop if error
-        if (error) { o.error(error); }
+        if (err) {
 
-        o.next(size);
-        o.complete();
+          o.error(err);
+
+        } else {
+
+          o.next(size);
+          o.complete();
+
+        }
 
       })
 

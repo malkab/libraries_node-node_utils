@@ -55,8 +55,8 @@ VOLATILE=true
 # Angular applications traditionally export port 4200. Incompatible with
 # NETWORK=container:XXX.
 PORTS=(
-  9011:9229
-  9012:9329
+  9021:9229
+  9022:9329
 )
 # Custom entrypoint.
 ENTRYPOINT=/bin/bash
