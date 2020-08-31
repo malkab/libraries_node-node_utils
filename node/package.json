@@ -1,6 +1,6 @@
 {
   "name": "@malkab/node-utils",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@malkab",
   "author": {
@@ -26,7 +26,7 @@
     "quick-test": "npm-run-all --parallel service:watch:quick-test:server service:build",
     "start": "npm-run-all --parallel service:watch:mocha:server service:build",
     "build": "npm run clean ; npm run service:build-lib",
-    "build-with-docs": "npm run clean ; npm run service:build-lib ; npm run builddocs ; cp -R typedoc/build/html dist/docs",
+    "build-with-docs": "npm run clean ; npm run service:build-lib ; npm run build-docs ; cp -R typedoc/build/html dist/docs",
     "build-docs": "cd typedoc ; ./html ; cd ..",
     "service:build-lib": "webpack --config webpack-production.config.js --progress --colors",
     "service:build": "webpack --progress --colors",
