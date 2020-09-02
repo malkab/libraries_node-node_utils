@@ -4,7 +4,8 @@ const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 module.exports = {
   entry: {
     mocha: "./src/test/main.test.ts",
-    quicktest: "./src/test/00-quick-test.ts"
+    quicktest: "./src/test/00_quick_test.ts",
+    index: "./src/lib/index.ts"
   },
   mode: "development",
   watch: true,
