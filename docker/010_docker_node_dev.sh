@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Version: 2020-08-19
+# Version: 2020-10-11A
 
 # -----------------------------------------------------------------
 #
@@ -42,8 +42,7 @@ CONTAINER_HOST_NAME=node_utils_dev
 # local .npmrc is also included as a volume, so login permissions to private
 # repos are shared with the container.
 VOLUMES=(
-  $(pwd):/ext_src
-  $(pwd)/../node/:$(pwd)/../node/
+  $(pwd)/../../../:$(pwd)/../../../
   ~/.npmrc:/root/.npmrc
   ~/.npmrc:/home/node/.npmrc
 )
@@ -54,10 +53,7 @@ VOLATILE=true
 # 8080 is typically assigned at container-level to an Express app entrypoint.
 # Angular applications traditionally export port 4200. Incompatible with
 # NETWORK=container:XXX.
-PORTS=(
-  9021:9229
-  9022:9329
-)
+PORTS=()
 # Custom entrypoint.
 ENTRYPOINT=/bin/bash
 # Custom workdir.
@@ -70,6 +66,10 @@ X11=false
 
 
 # ---
+
+echo -------------
+echo WORKING AT $(mlkcontext)
+echo -------------
 
 # Check mlkcontext
 if [ ! -z "${MATCH_MLKCONTEXT}" ] ; then
