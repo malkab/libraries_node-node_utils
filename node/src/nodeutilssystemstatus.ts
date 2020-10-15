@@ -1,6 +1,6 @@
 import * as nodeProcess from "process";
 
-import * as roundTo from "round-to";
+import roundTo from "round-to";
 
 import * as nodeOs from "os";
 

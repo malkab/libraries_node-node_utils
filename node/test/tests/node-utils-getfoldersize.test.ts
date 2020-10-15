@@ -12,7 +12,7 @@ Quick Test
 
 `);
 
-import * as u from "../../lib/index";
+import * as u from "../../src/index";
 
 u.NodeUtilsFiles.getFolderSize("/ext_src")
 .subscribe(

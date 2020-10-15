@@ -1,5 +1,7 @@
 # Boilerplate for Node Libraries
 
+Doc version: 2020-10-11
+
 This is the boilerplate to create Node libraries.
 
 

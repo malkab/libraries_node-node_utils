@@ -42,6 +42,7 @@ CONTAINER_HOST_NAME=node_utils_dev
 # local .npmrc is also included as a volume, so login permissions to private
 # repos are shared with the container.
 VOLUMES=(
+  $(pwd)/../node/test/assets/:/assets/
   $(pwd)/../../../:$(pwd)/../../../
   ~/.npmrc:/root/.npmrc
   ~/.npmrc:/home/node/.npmrc

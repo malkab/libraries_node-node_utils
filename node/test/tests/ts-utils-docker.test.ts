@@ -2,7 +2,7 @@ import "mocha";
 
 import { expect } from "chai";
 
-import { TsUtilsDocker as docker } from "../../lib/index";
+import { NodeUtilsDocker as docker } from "../../src/index";
 
 
 

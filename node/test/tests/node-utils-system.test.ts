@@ -12,7 +12,7 @@ Quick Test
 
 `);
 
-import * as u from "../../lib/index";
+import * as u from "../../src/index";
 
 console.log("D: 000", u.NodeUtilsSystemStatus.nodeMemoryUsage());
 

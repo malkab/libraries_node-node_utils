@@ -1,22 +1,25 @@
+// Doc version: 2020-10-11
+
 const path = require('path');
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 
 module.exports = {
   entry: {
-    mocha: "./src/test/main.test.ts",
-    quicktest: "./src/test/00_quick_test.ts",
-    index: "./src/lib/index.ts"
+    mocha: "./test/main.test.ts",
+    quicktest: "./test/00_quick_test.ts",
+    index: "./src/index.ts"
   },
   mode: "development",
   watch: true,
+  watchOptions: {
+    poll: true,
+    aggregateTimeout: 300,
+    ignored: /node_modules/
+  },
   target: "node",
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './build'
-  },
-  watchOptions: {
-    poll: true,
-    ignored: /node_modules/
   },
 
   output: {
@@ -55,5 +58,4 @@ module.exports = {
       exclude: /Critical dependency: the request of a dependency is an expression/
     })
   ]
-
 };

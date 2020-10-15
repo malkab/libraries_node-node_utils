@@ -10,4 +10,5 @@ README-package-json.md
 tsconfig.json
 tslint.json
 webpack*
+test
 README_boilerplate.md

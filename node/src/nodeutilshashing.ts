@@ -1,15 +1,15 @@
 import { md } from "node-forge";
 
-import * as uid from "uid-generator";
+import uid from "uid-generator";
 
 import { hashSync as bcryptHash } from "bcryptjs";
 
 export namespace NodeUtilsHashing {
 
   /**
-   * 
+   *
    * Returns an UID.
-   * 
+   *
    */
   export function genUid(): string {
 
@@ -19,10 +19,10 @@ export namespace NodeUtilsHashing {
 
   }
 
-  /** 
-   * 
+  /**
+   *
    * Encrypt something with bcrypthash.
-   * 
+   *
    */
   export function encrypt(item: string, size: number = 10): string {
 
@@ -31,13 +31,13 @@ export namespace NodeUtilsHashing {
   }
 
   /**
-   * 
+   *
    * Returns minihashes of the specified target lenght for a set of seeds.
-   * 
+   *
    */
   export function miniHash(
-    seeds: string[], 
-    existingSeeds: string[] = [], 
+    seeds: string[],
+    existingSeeds: string[] = [],
     time: boolean = false
   ): string[] {
 
@@ -75,7 +75,7 @@ export namespace NodeUtilsHashing {
   }
 
   /**
-   * 
+   *
    * Returns a sha256 hash, optionally taking into account a time
    * seed to improve uniqueness.
    *
