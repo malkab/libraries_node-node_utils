@@ -4,96 +4,92 @@ import uid from "uid-generator";
 
 import { hashSync as bcryptHash } from "bcryptjs";
 
-export namespace NodeUtilsHashing {
+/**
+ *
+ * Returns an UID.
+ *
+ */
+export function genUid(): string {
 
-  /**
-   *
-   * Returns an UID.
-   *
-   */
-  export function genUid(): string {
+  const uidgen: any = new uid(48);
 
-    const uidgen: any = new uid(48);
+  return uidgen.generateSync();
 
-    return uidgen.generateSync();
+}
 
-  }
+/**
+ *
+ * Encrypt something with bcrypthash.
+ *
+ */
+export function encrypt(item: string, size: number = 10): string {
 
-  /**
-   *
-   * Encrypt something with bcrypthash.
-   *
-   */
-  export function encrypt(item: string, size: number = 10): string {
+  return bcryptHash(item, size);
 
-    return bcryptHash(item, size);
+}
 
-  }
+/**
+ *
+ * Returns minihashes of the specified target lenght for a set of seeds.
+ *
+ */
+export function miniHash(
+  seeds: string[],
+  existingSeeds: string[] = [],
+  time: boolean = false
+): string[] {
 
-  /**
-   *
-   * Returns minihashes of the specified target lenght for a set of seeds.
-   *
-   */
-  export function miniHash(
-    seeds: string[],
-    existingSeeds: string[] = [],
-    time: boolean = false
-  ): string[] {
+  for (const x of seeds) {
 
-    for (const x of seeds) {
+    const s: string = sha256(x, time);
 
-      const s: string = sha256(x, time);
+    let existing: boolean = true;
 
-      let existing: boolean = true;
+    let l: number = 1;
 
-      let l: number = 1;
+    while (existing) {
 
-      while (existing) {
+      existing = false;
 
-        existing = false;
+      const mini: string = s.substring(0, l);
 
-        const mini: string = s.substring(0, l);
+      if (existingSeeds.indexOf(mini) > -1) {
 
-        if (existingSeeds.indexOf(mini) > -1) {
+        existing = true;
+        l += 1;
 
-          existing = true;
-          l += 1;
+      } else {
 
-        } else {
-
-          existingSeeds.push(mini);
-
-        }
+        existingSeeds.push(mini);
 
       }
 
     }
 
-    return existingSeeds;
+  }
+
+  return existingSeeds;
+
+}
+
+/**
+ *
+ * Returns a sha256 hash, optionally taking into account a time
+ * seed to improve uniqueness.
+ *
+ */
+export function sha256(seed: string, time?: boolean): string {
+
+  const mdi: md.MessageDigest = md.sha256.create();
+
+  if (time) {
+
+    seed = `${seed}${Date.now()}`;
 
   }
 
-  /**
-   *
-   * Returns a sha256 hash, optionally taking into account a time
-   * seed to improve uniqueness.
-   *
-   */
-  export function sha256(seed: string, time?: boolean): string {
+  mdi.update(seed);
 
-    const mdi: md.MessageDigest = md.sha256.create();
-
-    if (time) {
-
-      seed = `${seed}${Date.now()}`;
-
-    }
-
-    mdi.update(seed);
-
-    return mdi.digest().toHex();
-
-  }
+  return mdi.digest().toHex();
 
 }

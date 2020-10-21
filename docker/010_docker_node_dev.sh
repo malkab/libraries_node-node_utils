@@ -43,7 +43,7 @@ CONTAINER_HOST_NAME=node_utils_dev
 # repos are shared with the container.
 VOLUMES=(
   $(pwd)/../node/test/assets/:/assets/
-  $(pwd)/../../../:$(pwd)/../../../
+  $(pwd)/../node/:$(pwd)/../node/
   ~/.npmrc:/root/.npmrc
   ~/.npmrc:/home/node/.npmrc
 )

@@ -1,3 +1,7 @@
+import "mocha";
+
+import "webpack";
+
 console.log(`
 
 --------------------------
@@ -8,9 +12,10 @@ Mocha testing
 
 `);
 
-// Add test suites here
-
-import "./tests/ts-utils-hashing.test";
-
-import "./tests/ts-utils-docker.test";
-
+describe("node-utils Tests", () => {
+  // require("./tests/node-utils-getfoldersize.test")
+  // require("./tests/node-utils-readjson.test"),
+  // require("./tests/node-utils-system.test"),
+  // require("./tests/ts-utils-docker.test")
+  require("./tests/nodeutilsfiles.test")
+});

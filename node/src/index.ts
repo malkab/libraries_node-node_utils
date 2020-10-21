@@ -1,5 +1,9 @@
-export * from "./nodeutilshashing";
-export * from "./nodeutilsdocker";
-export * from "./nodeutilsfiles";
+export * as NodeUtilsHashing from "./nodeutilshashing";
+
+export * as NodeUtilsDocker from "./nodeutilsdocker";
+
+export * as NodeUtilsFiles from "./nodeutilsfiles";
+
 export * from "./idockerinfo";
-export * from "./nodeutilssystemstatus";
+
+export * as NodeUtilsSystemStatus from "./nodeutilssystemstatus";
