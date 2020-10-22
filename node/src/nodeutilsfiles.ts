@@ -14,6 +14,8 @@ import * as papaparse from "papaparse";
 
 import * as fs from 'fs-extra';
 
+import { BaseEncodingOptions } from 'fs-extra';
+
 /**
  *
  * Filesystem's utils.
@@ -98,7 +100,6 @@ export function readJson$(
 ): rx.Observable<any> {
 
   const p: string = path.join(...filePath);
-
   return rx.from(fs.readJSON(p, { encoding: encoding }));
 
 }
@@ -111,11 +112,114 @@ export function readJson$(
 export function readJsonSync(
   filePath: string[],
   { encoding = "utf8" }: { encoding?: string } = {}
-): void {
+): any {
 
   const p: string = path.join(...filePath);
-
   return fs.readJSONSync(p, { encoding: encoding });
+
+}
+
+/**
+ *
+ * Reads a file.
+ *
+ * @param   filePathName
+ * The path of the file to be written inside the folder of FEE.
+ * @param   json              The JSON to write.
+ * @param   beautifySpaces    Set different to null to output
+ *                            a beautiful JSON.
+ *
+ */
+export function readFile$(
+  filePath: string[],
+  { encoding = "utf8" }: { encoding?: string } = {}
+): rx.Observable<any> {
+
+  const p: string = path.join(...filePath);
+  return rx.from(fs.readFile(p, { encoding: encoding }));
+
+}
+
+/**
+ *
+ * Reads a file.
+ *
+ */
+export function readFileSync(
+  filePath: string[],
+  { encoding = "utf8" }: { encoding?: BaseEncodingOptions["encoding"] } = {}
+): any {
+
+  const p: string = path.join(...filePath);
+  return fs.readFileSync(p, { encoding: encoding });
+
+}
+
+/**
+ *
+ * Reads a text file and return its lines.
+ *
+ * @param   filePathName
+ * The path of the file to be written inside the folder of FEE.
+ * @param   json              The JSON to write.
+ * @param   beautifySpaces    Set different to null to output
+ *                            a beautiful JSON.
+ *
+ */
+export function readFileLines$(
+  filePath: string[],
+  {
+    encoding = "utf8",
+    cleanEmptyLines = true,
+    trim = true
+  }: {
+    encoding?: string;
+    cleanEmptyLines?: boolean;
+    trim?: boolean;
+  } = {}
+): rx.Observable<string[]> {
+
+  const p: string = path.join(...filePath);
+  return rx.from(fs.readFile(p, { encoding: encoding }))
+  .pipe(
+
+    rxo.map((o: string) => {
+
+      let out: string[] = o.split("\n");
+      if (trim) { out = out.map((o: string) => o.trim()) };
+      if (cleanEmptyLines) { out = out.filter((l: string) => l !== "") };
+      return out;
+
+    })
+
+  );
+
+}
+
+/**
+ *
+ * Reads a text file and returns its lines.
+ *
+ */
+export function readFileLinesSync(
+  filePath: string[],
+  {
+    encoding = "utf8",
+    cleanEmptyLines = true,
+    trim = true
+  }: {
+    encoding?: BaseEncodingOptions["encoding"];
+    cleanEmptyLines?: boolean;
+    trim?: boolean;
+  } = {}
+): string[] {
+
+  const p: string = path.join(...filePath);
+  const f: string = <string>fs.readFileSync(p, { encoding: encoding });
+  let out: string[] = f.split("\n");
+  if (trim) { out = out.map((o: string) => o.trim()) };
+  if (cleanEmptyLines) { out = out.filter((l: string) => l !== "") };
+  return out;
 
 }
 
