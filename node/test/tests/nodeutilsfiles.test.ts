@@ -1,10 +1,8 @@
 import { rxMochaTests } from "@malkab/ts-utils";
 
-import { NodeUtilsFiles as f } from "../../src/index";
+import { deleteFolderSync, deleteFolderContentSync, getFolderContentSync, copy$, getFolderContent$, deleteFolderContent$, deleteFolder$, copySync } from "../../src/index";
 
-import { expect, assert } from "chai";
-
-import * as rx from "rxjs";
+import { expect } from "chai";
 
 /**
  *
@@ -23,13 +21,13 @@ describe("Test copy$", function() {
 
     testCaseName: "Test copy$",
 
-    observable: rx.concat(
+    observables: [
 
-      f.copy$([ "./test/assets" ], [ "./test/assets_copy" ]),
+      copy$([ "./test/assets" ], [ "./test/assets_copy" ]),
       // This is an error, that's why is left the last
-      f.copy$([ "../../assets" ], [ "../../assets_copy" ])
+      copy$([ "../../assets" ], [ "../../assets_copy" ])
 
-    ),
+    ],
 
     assertions: [
 
@@ -57,7 +55,7 @@ describe("Test getFolderContent$", function() {
 
     testCaseName: "Test getFolderContent$",
 
-    observable: f.getFolderContent$([ "./test/assets_copy" ]),
+    observables: [ getFolderContent$([ "./test/assets_copy" ]) ],
 
     assertions: [
 
@@ -81,7 +79,7 @@ describe("Test deleteFolderContent$", function() {
 
     testCaseName: "Test deleteFolderContent$",
 
-    observable: f.deleteFolderContent$([ "./test/assets_copy" ]),
+    observables: [ deleteFolderContent$([ "./test/assets_copy" ]) ],
 
     assertions: [
 
@@ -104,7 +102,7 @@ describe("Test deleteFolder$", function() {
 
     testCaseName: "Test deleteFolder$",
 
-    observable: f.deleteFolder$([ "./test/assets_copy" ]),
+    observables: [ deleteFolder$([ "./test/assets_copy" ]) ],
 
     assertions: [
 
@@ -126,14 +124,14 @@ describe("Test copySync", function() {
   it("Test copySync failing", function() {
 
     // Thrown errors must be checked this way, by adding a function to expect
-    expect(() => f.copySync([ "../../assets" ], [ "../../assets_copy" ]))
+    expect(() => copySync([ "../../assets" ], [ "../../assets_copy" ]))
       .to.throw("ENOENT: no such file or directory, stat \'../../assets\'");
 
   });
 
   it("Test copySync", function() {
 
-    expect(f.copySync([ "./test/assets" ], [ "./test/assets_copy" ]))
+    expect(copySync([ "./test/assets" ], [ "./test/assets_copy" ]))
       .to.be.undefined;
 
   });
@@ -149,7 +147,7 @@ describe("Test getFolderContentSync", function() {
 
   it("Test getFolderContentSync", function() {
 
-    expect(f.getFolderContentSync([ "./test/assets_copy" ]))
+    expect(getFolderContentSync([ "./test/assets_copy" ]))
       .to.be.deep.equal([ 'csv_test.csv', 'test_folder_a', 'test_folder_b' ]);
 
   });
@@ -165,7 +163,7 @@ describe("Test deleteFolderContentSync", function() {
 
   it("Test deleteFolderContentSync", function() {
 
-    expect(f.deleteFolderContentSync([ "./test/assets_copy" ]))
+    expect(deleteFolderContentSync([ "./test/assets_copy" ]))
       .to.be.true;
 
   });
@@ -181,7 +179,7 @@ describe("Test deleteFolderSync", function() {
 
   it("Test deleteFolderSync", function() {
 
-    expect(f.deleteFolderSync([ "./test/assets_copy" ]))
+    expect(deleteFolderSync([ "./test/assets_copy" ]))
       .to.be.true;
 
   });

@@ -105,8 +105,7 @@ export function miniHash({
   }
 
   // Check if the existing mini hashes must be included
-  return includeExisting ? [ ...newMiniHashes, ...existingMiniHashes ] :
-    newMiniHashes;
+  return includeExisting ? existingMiniHashes : newMiniHashes;
 
 }
 

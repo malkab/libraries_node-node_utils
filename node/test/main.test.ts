@@ -12,10 +12,12 @@ Mocha testing
 
 `);
 
-describe("node-utils Tests", () => {
-  // require("./tests/node-utils-getfoldersize.test")
-  // require("./tests/node-utils-readjson.test"),
-  // require("./tests/node-utils-system.test"),
-  // require("./tests/ts-utils-docker.test")
-  require("./tests/nodeutilsfiles.test")
+// Add test suites here
+describe("node-utils", () => {
+
+  describe("\n\n  --- nodeutilsdocker.test ---\n", () => require("./tests/nodeutilsdocker.test"));
+  describe("\n\n  --- nodeutilsfiles.test ---\n", () => require("./tests/nodeutilsfiles.test"));
+  describe("\n\n  --- nodeutilshashing.test ---\n", () => require("./tests/nodeutilshashing.test"));
+  describe("\n\n  --- nodeutilsaxios.test ---\n", () => require("./tests/nodeutilsaxios.test"));
+
 });
