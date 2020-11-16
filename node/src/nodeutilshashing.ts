@@ -12,7 +12,6 @@ import { hashSync as bcryptHash } from "bcryptjs";
 export function genUid(): string {
 
   const uidgen: any = new uid(48);
-
   return uidgen.generateSync();
 
 }
