@@ -113,8 +113,12 @@ export function miniHash({
  * Returns a sha256 hash, optionally taking into account a time
  * seed to improve uniqueness.
  *
+ * @param seed      The seed to produce the sha256.
+ * @param time      Boolean to add Date.now() to improve uniqueness.
+ * @returns         The sha256.
+ *
  */
-export function sha256(seed: string, time?: boolean): string {
+export function sha256(seed: string, time: boolean = false): string {
 
   const mdi: md.MessageDigest = md.sha256.create();
 

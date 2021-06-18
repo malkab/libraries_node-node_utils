@@ -26,18 +26,19 @@ import { BaseEncodingOptions } from 'fs-extra';
  *
  * Writes a TXT to file.
  *
- * @param   filePathName      The path of the file to be written
+ * @param filePathName        The path of the file to be written
  *                            inside the folder of FEE.
- * @param   json              The JSON to write.
+ * @param json                The JSON to write.
+ * @returns                   The final path of the file written, as a string.
  *
  */
 export function writeTxt$(
   filePath: string[],
   txt: any,
   { encoding = "utf8" }: { encoding?: fs.BaseEncodingOptions["encoding"]; } = {}
-): rx.Observable<boolean> {
+): rx.Observable<string> {
 
-  return new rx.Observable<boolean>((o: any) => {
+  return new rx.Observable<string>((o: any) => {
 
     const p: string = path.join(...filePath);
 
@@ -49,7 +50,7 @@ export function writeTxt$(
 
       } else {
 
-        o.next(true);
+        o.next(p);
         o.complete();
 
       }
@@ -482,20 +483,28 @@ export function copySync(origin: string[], destination: string[]): void {
  *
  * Requires an installation of 7zip.
  *
- * @param folder
- * @param zipFilePathName
+ * @param         folder
+ * @param         zipFilePathName
+ * @returns       An Observable with the name of the zipped file.
  *
  */
-export function zipFolder(folder: string[], zipFilePathName: string[]):
+export function zipFolder$(folder: string[], zipFilePathName: string[]):
 rx.Observable<string> {
 
-  const folderP: string = path.join(...folder);
+  // Add the * to the path so only items in the folder are added to the zip
+  folder.push("*")
+  let folderP: string = path.join(...folder);
   const zipFilePathNameP: string = path.join(...zipFilePathName);
+
+  // Add . at the beginning to avoid zipping full path. Done so because
+  // path.join omits it.
+  folderP = `./${folderP}`;
 
   return new rx.Observable<string>((o: any) => {
 
-    child_process.exec(`7z a ${zipFilePathNameP} ${folderP}`,
-      (err: any, stdout: any, stderr: any) => {
+    const command: string = `7z a -tzip -r ${zipFilePathNameP} ${folderP}`;
+
+    child_process.exec(command, (err: any, stdout: any, stderr: any) => {
 
         if (err) {
 
@@ -821,6 +830,8 @@ export function writeCsvSync(filePath: string[], data: any, {
  *
  * Read a CSV with Papaparse. Check papaparse options at the papaparse page.
  *
+ * @returns           The path of the file written as a string.
+ *
  */
 export function writeCsv$(file: string[], data: any, {
     encoding = <BufferEncoding>"utf8",
@@ -842,7 +853,7 @@ export function writeCsv$(file: string[], data: any, {
     newline?: string;
     skipEmptyLines?: boolean;
     columns?: undefined | string[];
-} = {}): rx.Observable<boolean> {
+} = {}): rx.Observable<string> {
 
   const f: string = papaparse.unparse(data, {
     delimiter: delimiter,
