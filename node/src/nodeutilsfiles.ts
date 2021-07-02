@@ -481,28 +481,51 @@ export function copySync(origin: string[], destination: string[]): void {
 
 /**
  *
- * Requires an installation of 7zip.
+ * Runs a 7z command. Requires an installation of 7zip in the system / Docker image.
+ * 7z can be a little bit tricky to get the desired result. To ZIP the contents of a
+ * folder without zipping the folder path, use the following recipe:
  *
- * @param         folder
- * @param         zipFilePathName
- * @returns       An Observable with the name of the zipped file.
+ * ```shell
+ * 7z a -tzip -r path/to/zip/file.zip ./folder/to/zip/*
+ * ```
+ *
+ * Note the beginning "./" and the "*" in the folder to ZIP path. ZIP options are:
+ *
+ * - zipOptions: any options to pass to 7z, like -tzip -r;
+ * - dotPrefix:  add the "./" to the start of the folder to ZIP path. This has
+ *               to be provided explicitly because path.join drops any "./"
+ *               passed as a argument.
+ *
+ * @param         itemsToZip              Items to zip, this will be submitted
+ *                                        to path.join.
+ * @param         zipFilePathName         Path of the zip file to be created.
+ * @param         zipOptions              Zip options, defaults to none.
+ * @returns                               An Observable that returns the final
+ *                                        path of the zipped file.
  *
  */
-export function zipFolder$(folder: string[], zipFilePathName: string[]):
-rx.Observable<string> {
+export function zip$(
+  itemsToZip: string[],
+  zipFilePathName: string[],
+  {
+    zipOptions,
+    dotPrefix
+  }: {
+    zipOptions: string;
+    dotPrefix: boolean;
+  } = {
+    zipOptions: "",
+    dotPrefix: false
+  }
+): rx.Observable<string> {
 
-  // Add the * to the path so only items in the folder are added to the zip
-  folder.push("*")
-  let folderP: string = path.join(...folder);
+  const itemsToZipP: string = path.join(...itemsToZip);
   const zipFilePathNameP: string = path.join(...zipFilePathName);
-
-  // Add . at the beginning to avoid zipping full path. Done so because
-  // path.join omits it.
-  folderP = `./${folderP}`;
+  const dotPrefixP: string = dotPrefix ? "./" : ""
 
   return new rx.Observable<string>((o: any) => {
 
-    const command: string = `7z a -tzip -r ${zipFilePathNameP} ${folderP}`;
+    const command: string = `7z a ${zipOptions} ${zipFilePathNameP} ${dotPrefixP}${itemsToZipP}`;
 
     child_process.exec(command, (err: any, stdout: any, stderr: any) => {
 
