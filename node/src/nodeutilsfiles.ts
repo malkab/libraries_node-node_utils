@@ -481,66 +481,79 @@ export function copySync(origin: string[], destination: string[]): void {
 
 /**
  *
- * Runs a 7z command. Requires an installation of 7zip in the system / Docker image.
- * 7z can be a little bit tricky to get the desired result. To ZIP the contents of a
- * folder without zipping the folder path, use the following recipe:
+ * Runs a 7z command. Requires an installation of 7zip in the system / Docker
+ * image. 7z can be a little bit tricky to get the desired result. To ZIP the
+ * contents of a folder without zipping the folder path, use the following
+ * recipe:
  *
  * ```shell
  * 7z a -tzip -r path/to/zip/file.zip ./folder/to/zip/*
  * ```
  *
- * Note the beginning "./" and the "*" in the folder to ZIP path. ZIP options are:
+ * Note the beginning "./" and the "*" in the folder to ZIP path. ZIP options
+ * are:
  *
  * - zipOptions: any options to pass to 7z, like -tzip -r;
  * - dotPrefix:  add the "./" to the start of the folder to ZIP path. This has
  *               to be provided explicitly because path.join drops any "./"
  *               passed as a argument.
  *
- * @param         itemsToZip              Items to zip, this will be submitted
- *                                        to path.join.
- * @param         zipFilePathName         Path of the zip file to be created.
- * @param         zipOptions              Zip options, defaults to none.
+ * @param         itemsToZip              A string with the path expression of
+ *                                        the items to zip. This is the
+ *                                        trickiest part. No path.join is used
+ *                                        here because it makes too many
+ *                                        assumptions that makes 7zip usage
+ *                                        difficult. Use path.join externally if
+ *                                        needed.
+ * @param         zipFilePathName         Path of the zip file to be created,
+ *                                        also a string.
+ * @param         __namedParameters       Optional options: zipFile to true to
+ *                                        generate a .zip file instead of a .7z
+ *                                        and recursive for recursive zipping.
+ *                                        defaults to empty string.
  * @returns                               An Observable that returns the final
  *                                        path of the zipped file.
  *
  */
 export function zip$(
-  itemsToZip: string[],
-  zipFilePathName: string[],
+  itemsToZip: string,
+  zipFilePathName: string,
   {
-    zipOptions,
-    dotPrefix
+    zipFile,
+    recursive
   }: {
-    zipOptions: string;
-    dotPrefix: boolean;
+    zipFile: boolean;
+    recursive: boolean;
   } = {
-    zipOptions: "",
-    dotPrefix: false
+    zipFile: false,
+    recursive: false
   }
 ): rx.Observable<string> {
 
-  const itemsToZipP: string = path.join(...itemsToZip);
-  const zipFilePathNameP: string = path.join(...zipFilePathName);
-  const dotPrefixP: string = dotPrefix ? "./" : ""
-
   return new rx.Observable<string>((o: any) => {
 
-    const command: string = `7z a ${zipOptions} ${zipFilePathNameP} ${dotPrefixP}${itemsToZipP}`;
+    // Process options
+    const zipFileF: string = zipFile ? "-r" : "";
+    const recursiveF: string = recursive ? "-tzip" : "";
+
+    // Compose command
+    const command: string =
+      `7z a ${zipFileF} ${recursiveF} ${zipFilePathName} ${itemsToZip}`;
 
     child_process.exec(command, (err: any, stdout: any, stderr: any) => {
 
-        if (err) {
+      if (err) {
 
-          o.error(err);
+        o.error(err);
 
-        } else {
+      } else {
 
-          o.next(zipFilePathNameP);
-          o.complete();
+        o.next(zipFile ? `${zipFilePathName}.zip` : `${zipFilePathName}.7z`);
+        o.complete();
 
-        }
+      }
 
-      })
+    })
 
   })
 
