@@ -14,7 +14,7 @@ import * as papaparse from "papaparse";
 
 import * as fs from 'fs-extra';
 
-import { BaseEncodingOptions } from 'fs-extra';
+import { ObjectEncodingOptions } from 'fs-extra';
 
 /**
  *
@@ -35,7 +35,7 @@ import { BaseEncodingOptions } from 'fs-extra';
 export function writeTxt$(
   filePath: string[],
   txt: any,
-  { encoding = "utf8" }: { encoding?: fs.BaseEncodingOptions["encoding"]; } = {}
+  { encoding = "utf8" }: { encoding?: fs.ObjectEncodingOptions["encoding"]; } = {}
 ): rx.Observable<string> {
 
   return new rx.Observable<string>((o: any) => {
@@ -75,7 +75,7 @@ export function writeTxt$(
 export function writeTxtSync(
   filePath: string[],
   txt: string,
-  { encoding = "utf8" }: { encoding?: fs.BaseEncodingOptions["encoding"]; } = {}
+  { encoding = "utf8" }: { encoding?: fs.ObjectEncodingOptions["encoding"]; } = {}
 ): void {
 
   const p: string = path.join(...filePath);
@@ -148,7 +148,7 @@ export function readFile$(
  */
 export function readFileSync(
   filePath: string[],
-  { encoding = "utf8" }: { encoding?: BaseEncodingOptions["encoding"] } = {}
+  { encoding = "utf8" }: { encoding?: ObjectEncodingOptions["encoding"] } = {}
 ): any {
 
   const p: string = path.join(...filePath);
@@ -209,7 +209,7 @@ export function readFileLinesSync(
     cleanEmptyLines = true,
     trim = true
   }: {
-    encoding?: BaseEncodingOptions["encoding"];
+    encoding?: ObjectEncodingOptions["encoding"];
     cleanEmptyLines?: boolean;
     trim?: boolean;
   } = {}
@@ -569,15 +569,16 @@ export function getFolderSize(folder: string): rx.Observable<number> {
 
   return new rx.Observable<number>((o: any) => {
 
-    getFolderSizeFunction(folder, (err: Error | null, size: number) => {
+    getFolderSizeFunction(folder, { })
+    .then((out: { size: number, errors: any }) => {
 
-      if (err) {
+      if (out.errors) {
 
-        o.error(err);
+        o.error(out.errors);
 
       } else {
 
-        o.next(size);
+        o.next(out.size);
         o.complete();
 
       }
