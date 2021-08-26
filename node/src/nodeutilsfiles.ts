@@ -24,17 +24,17 @@ import { ObjectEncodingOptions } from 'fs-extra';
 
 /**
  *
- * Writes a TXT to file.
+ * Writes a string to file asynchroneously.
  *
- * @param filePathName        The path of the file to be written
- *                            inside the folder of FEE.
- * @param json                The JSON to write.
- * @returns                   The final path of the file written, as a string.
+ * @param filePathName        The path of the file to be written inside the
+ *                            folder of FEE.
+ * @param txt                 The string to write.
+ * @param config              Optional. The encoding to write to.
+ * @returns                   An observable with the final path of the file
+ *                            written, as a string.
  *
  */
-export function writeTxt$(
-  filePath: string[],
-  txt: any,
+export function writeTxt$(filePath: string[], txt: any,
   { encoding = "utf8" }: { encoding?: fs.ObjectEncodingOptions["encoding"]; } = {}
 ): rx.Observable<string> {
 
@@ -865,12 +865,15 @@ export function writeCsvSync(filePath: string[], data: any, {
 
 /**
  *
- * Read a CSV with Papaparse. Check papaparse options at the papaparse page.
+ * Write a JSON to a CSV file. Check papaparse options at the papaparse page.
  *
+ * @param     file    The path of the file to be written.
+ * @param     data    The JSON to be written.
+ * @param     config  papaparse options to write the file.
  * @returns           The path of the file written as a string.
  *
  */
-export function writeCsv$(file: string[], data: any, {
+export function writeJsonAsCsv$(file: string[], data: any, {
     encoding = <BufferEncoding>"utf8",
     delimiter,
     quotes,
