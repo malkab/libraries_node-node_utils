@@ -1,18 +1,14 @@
 {
-
-    "inputFiles": [
-        "../src"
-    ],
-
-    "name": "node-utils",
-    "inlineSourceMap": true,
-    "includeDeclarations": true,
-    "ignoreCompilerErrors": true,
-    "mode": "file",
+    "entryPoints": [ "../src/index.ts" ],
+    "entryPointStrategy": "resolve",
+    "name": "Node-Utils",
+    "includeVersion": true,
+    "readme": "./MAINPAGE.md",
+    "sort": "alphabetical",
+    "gitRevision": true,
+    "gitRemote": true,
     "excludeExternals": true,
-    "excludeNotExported": true,
     "excludeProtected": true,
     "excludePrivate": true,
-    "readme": "./markdown/MAINPAGE.md"
-
-}
+    "excludeInternal": true
+  }

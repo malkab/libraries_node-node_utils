@@ -13,6 +13,8 @@ module.exports = {
   mode: "production",
   target: "node",
 
+  stats: "errors-only",
+
   plugins: [
 
     new CleanWebpackPlugin()

@@ -1,7 +1,5 @@
 # Boilerplate for Node Libraries
 
-Doc version: 2020-10-11
-
 This is the boilerplate to create Node libraries.
 
 
@@ -24,13 +22,13 @@ Steps:
 
 - check for **console.log("D:** left behind;
 
-- test **yarn build** or **yarn build-with-docs** (better the last one, copy resulting docs to mlk-docs);
-
-- test **yarn pack**;
+- test **yarn build**;
 
 - review changes with Git to get a clear idea of changes in the current version, but don't commit yet;
 
-- test **yarn publish**, changing version with **yarn version** if needed. Start new projects always at **version 1.0.0** and start working on it at the fix number no matter what the changes are. **0 or odd** minor versions means developing versions, never go out of that until it is considered stable, at which point move to an **even** minor version number and make fixes to that. Only change major version changes on truly backward incompatible changes. **LET THE CODE MATURE BEFORE COMITTING EVEN VERSION NUMBERS**;
+- for quick dev publish, use **yarn publish-dev** that will bump the patch version;
+
+- for a release publish, test the package with **yarn pack** and then **yarn publish**. Start new projects always at **version 0.0.1**. When reaching version 1.0.0, **0 or odd** minor versions means stable versions and **even** minor version number unstable ones. Only change major version changes on truly backward incompatible changes. **LET THE CODE MATURE BEFORE COMITTING ODD MINOR VERSION NUMBERS**;
 
 - close the Git Flow feature and go back to **develop**, if any. Get a clear idea of changes in the current version;
 
@@ -45,5 +43,3 @@ git push --tags
 git fetch -av --prune
 git branch -av
 ```
-
-- create a new Release at GitLab from the last **master**. Set **Tag name** and **Release title** to **vX.X.X**.

@@ -1,6 +1,8 @@
 import { rxMochaTests } from "@malkab/ts-utils";
 
-import { deleteFolderSync, deleteFolderContentSync, getFolderContentSync, copy$, getFolderContent$, deleteFolderContent$, deleteFolder$, copySync } from "../../src/index";
+import { deleteFolderSync, deleteFolderContentSync, getFolderContentSync, copy$,
+  getFolderContent$, deleteFolderContent$, deleteFolder$, copySync, readYaml$,
+  readYamlSync } from "../../../src/index";
 
 import { expect } from "chai";
 
@@ -23,7 +25,8 @@ describe("Test copy$", function() {
 
     observables: [
 
-      copy$([ "./test/assets" ], [ "./test/assets_copy" ]),
+      copy$([ "test", "tests", "nodeutilsfiles", "assets" ],
+        [ "test", "tests", "nodeutilsfiles", "assets_copy" ]),
       // This is an error, that's why is left the last
       copy$([ "../../assets" ], [ "../../assets_copy" ])
 
@@ -31,7 +34,8 @@ describe("Test copy$", function() {
 
     assertions: [
 
-      (o: any) => expect(o).to.be.equal("test/assets_copy"),
+      (o: any) =>
+        expect(o).to.be.equal("test/tests/nodeutilsfiles/assets_copy"),
       // Thrown errors by observables aren't detected as errors by
       // Mocha and are tested like regular objects
       (o: any) => expect(o.errno).to.be.equal(-2)
@@ -55,12 +59,13 @@ describe("Test getFolderContent$", function() {
 
     testCaseName: "Test getFolderContent$",
 
-    observables: [ getFolderContent$([ "./test/assets_copy" ]) ],
+    observables: [ getFolderContent$([ "test", "tests",
+      "nodeutilsfiles", "assets_copy" ]) ],
 
     assertions: [
 
       (o: any) => expect(o).to.be.deep.equal(
-        [ 'csv_test.csv', 'test_folder_a', 'test_folder_b' ])
+        [ 'csv_test.csv', 'test_folder_a', 'test_folder_b', 'yaml.yaml' ])
 
     ]
 
@@ -79,7 +84,8 @@ describe("Test deleteFolderContent$", function() {
 
     testCaseName: "Test deleteFolderContent$",
 
-    observables: [ deleteFolderContent$([ "./test/assets_copy" ]) ],
+    observables: [ deleteFolderContent$(
+      [ "test", "tests", "nodeutilsfiles", "assets_copy" ]) ],
 
     assertions: [
 
@@ -102,7 +108,8 @@ describe("Test deleteFolder$", function() {
 
     testCaseName: "Test deleteFolder$",
 
-    observables: [ deleteFolder$([ "./test/assets_copy" ]) ],
+    observables: [ deleteFolder$(
+      [ "test", "tests", "nodeutilsfiles", "assets_copy" ]) ],
 
     assertions: [
 
@@ -125,14 +132,14 @@ describe("Test copySync", function() {
 
     // Thrown errors must be checked this way, by adding a function to expect
     expect(() => copySync([ "../../assets" ], [ "../../assets_copy" ]))
-      .to.throw("ENOENT: no such file or directory, stat \'../../assets\'");
+      .to.throw("ENOENT: no such file or directory, lstat \'../../assets\'");
 
   });
 
   it("Test copySync", function() {
 
-    expect(copySync([ "./test/assets" ], [ "./test/assets_copy" ]))
-      .to.be.undefined;
+    expect(copySync([ "test", "tests", "nodeutilsfiles", "assets" ],
+      [ "test", "tests", "nodeutilsfiles", "assets_copy" ])).to.be.undefined;
 
   });
 
@@ -147,8 +154,10 @@ describe("Test getFolderContentSync", function() {
 
   it("Test getFolderContentSync", function() {
 
-    expect(getFolderContentSync([ "./test/assets_copy" ]))
-      .to.be.deep.equal([ 'csv_test.csv', 'test_folder_a', 'test_folder_b' ]);
+    expect(getFolderContentSync(
+      [ "test", "tests", "nodeutilsfiles", "assets_copy" ]))
+      .to.be.deep.equal([ 'csv_test.csv', 'test_folder_a', 'test_folder_b',
+      'yaml.yaml' ]);
 
   });
 
@@ -163,8 +172,8 @@ describe("Test deleteFolderContentSync", function() {
 
   it("Test deleteFolderContentSync", function() {
 
-    expect(deleteFolderContentSync([ "./test/assets_copy" ]))
-      .to.be.true;
+    expect(deleteFolderContentSync(
+      [ "test", "tests", "nodeutilsfiles", "assets_copy" ])).to.be.true;
 
   });
 
@@ -179,8 +188,52 @@ describe("Test deleteFolderSync", function() {
 
   it("Test deleteFolderSync", function() {
 
-    expect(deleteFolderSync([ "./test/assets_copy" ]))
-      .to.be.true;
+    expect(deleteFolderSync(
+      [ "test", "tests", "nodeutilsfiles", "assets_copy" ])).to.be.true;
+
+  });
+
+})
+
+/**
+ *
+ * Test readYaml$.
+ *
+ */
+describe("Test readYaml$", function() {
+
+  rxMochaTests({
+
+    testCaseName: "Test readYaml$",
+
+    observables: [ readYaml$(
+      [ "test", "tests", "nodeutilsfiles", "assets", "yaml.yaml" ]) ],
+
+    assertions: [
+
+      (o: any) => expect(o.ssh["kepler-remote"].host)
+        .to.be.equal("the_default_host")
+
+    ],
+
+    verbose: false
+
+  })
+
+})
+
+/**
+ *
+ * Test readYamlSync.
+ *
+ */
+describe("Test readYamlSync", function() {
+
+  it("Test readYamlSync", function() {
+
+    expect(readYamlSync(
+      [ "test", "tests", "nodeutilsfiles", "assets", "yaml.yaml" ])
+      .ssh["kepler-remote"].host).to.be.equal("the_default_host");
 
   });
 

@@ -16,6 +16,8 @@ import * as fs from 'fs-extra';
 
 import { ObjectEncodingOptions } from 'fs-extra';
 
+import * as yaml from "js-yaml";
+
 /**
  *
  * Filesystem's utils.
@@ -86,7 +88,64 @@ export function writeTxtSync(
 
 /**
  *
- * Writes a JSON to file.
+ * Reads a YAML file asynchronously.
+ *
+ * @param filePath
+ * The path to the file to open.
+ *
+ * @param __namedParameters
+ * Options.
+ *
+ * @param __namedParameters.encoding
+ * Encoding.
+ *
+ * @returns
+ * The parsed object from the YAML.
+ *
+ */
+export function readYaml$(
+  filePath: string[],
+  { encoding = "utf8" }: { encoding?: string } = {}
+): rx.Observable<any> {
+
+  const p: string = path.join(...filePath);
+
+  return rx.from(fs.readFile(p, encoding)
+    .then((a: string) => yaml.load(a)));
+
+}
+
+/**
+ *
+ * Reads a YAML file synchronously.
+ *
+ * @param filePath
+ * The path to the file to open.
+ *
+ * @param __namedParameters
+ * Encoding of data.
+ *
+ * @param encoding
+ * Encoding.
+ *
+ * @returns
+ * The parsed object from the YAML.
+ *
+ */
+export function readYamlSync(
+  filePath: string[],
+  { encoding = "utf8" }: { encoding?: ObjectEncodingOptions["encoding"] } = {}
+): any {
+
+  const p: string = path.join(...filePath);
+
+  return yaml.load(<string>fs.readFileSync(p, { encoding: encoding }));
+
+}
+
+/**
+ *
+ * Reads a JSON asynchronously.
  *
  * @param   filePathName      The path of the file to be written
  *                            inside the folder of FEE.
@@ -107,7 +166,7 @@ export function readJson$(
 
 /**
  *
- * Reads a JSON file.
+ * Reads a JSON file synchronously.
  *
  */
 export function readJsonSync(

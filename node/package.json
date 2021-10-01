@@ -1,6 +1,6 @@
 {
   "name": "@malkab/node-utils",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@malkab",
   "author": {
@@ -14,6 +14,9 @@
     "utils",
     "typescript"
   ],
+  "directories": {
+    "docs": "docs"
+  },
   "license": "UNLICENSED",
   "homepage": "https://github.com/owner/project#readme",
   "repository": {
@@ -22,18 +25,17 @@
   },
   "private": false,
   "scripts": {
-    "package-json-version": "echo 2020-10-11",
-    "clean": "rm -Rf build ; rm -Rf dist",
-    "quick-test": "npm-run-all --parallel service:watch:quick-test:server service:build",
-    "start": "npm-run-all --parallel service:watch:mocha:server service:build",
-    "build": "npm run clean ; npm run service:build-lib",
-    "build-with-docs": "npm run clean ; npm run service:build-lib ; npm run build-docs ; rm -Rf docs ; cp -R typedoc/build/html docs",
-    "build-docs": "cd typedoc ; ./html ; cd ..",
+    "clean": "rm -Rf build/* ; rm -Rf dist/* ; rm -Rf docs",
+    "quicktest": "npm-run-all --parallel service:nodemon:quicktest service:webpack:quicktest",
+    "start": "npm-run-all --parallel service:nodemon:mocha service:webpack:mocha",
+    "build": "yarn clean ; webpack --config webpack.config.js --progress ; yarn build-docs",
     "publish-dev": "yarn build ; yarn publish --patch --no-git-tag-version",
-    "service:build-lib": "webpack --config webpack-production.config.js --progress",
-    "service:build": "webpack --progress --watch",
-    "service:watch:quick-test:server": "nodemon --inspect=0.0.0.0:9329 \"./build/quicktest.js\" --watch \"./build/quicktest.js\"",
-    "service:watch:mocha:server": "nodemon --ext js --watch ./build/ --exec 'mocha --timeout 20000 ./build/mocha.js || true'"
+    "publish": "yarn build ; yarn publish --no-git-tag-version",
+    "build-docs": "cd typedoc ; ./html ; cd ..",
+    "service:nodemon:quicktest": "nodemon --ext js --watch ./build/quicktest.js --exec 'mocha ./build/quicktest.js || true'",
+    "service:nodemon:mocha": "nodemon --ext js --watch ./build/mocha.js --exec 'mocha ./build/mocha.js || true'",
+    "service:webpack:quicktest": "webpack --config webpack-quicktest.config.js --progress",
+    "service:webpack:mocha": "webpack --config webpack-mocha.config.js --progress"
   },
   "engines": {
     "node": "^14.0.0"
@@ -44,7 +46,7 @@
     "@types/chai": "^4.2.14",
     "@types/fs-extra": "^9.0.4",
     "@types/get-folder-size": "^3.0.0",
-    "@types/mocha": "^8.0.0",
+    "@types/mocha": "9.0.0",
     "@types/node": "^16.0.0",
     "@types/node-forge": "^0.10.0",
     "@types/papaparse": "^5.2.4",
@@ -59,16 +61,18 @@
     "terser-webpack-plugin": "^5.0.0",
     "ts-loader": "^9.0.0",
     "ts-node": "^10.0.0",
-    "typedoc": "^0.21.0",
+    "typedoc": "0.22.4",
     "typescript": "^4.0.5",
     "webpack": "^5.0.0",
     "webpack-cli": "^4.0.0",
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "@types/js-yaml": "^4.0.3",
     "bcryptjs": "^2.4.3",
     "fs-extra": "^10.0.0",
     "get-folder-size": "^3.0.0",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "node-forge": "^0.10.0",
     "papaparse": "^5.3.0",

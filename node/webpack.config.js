@@ -1,72 +1,75 @@
-// Doc version: 2021-07-19
-
-// Webpack 5
+/**
+ *
+ * Webpack 5
+ *
+ * Builds the library at src/index.ts.
+ *
+ */
+const libraryName = "the-library";
 
 const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const nodeExternals = require("webpack-node-externals");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
 
+  /**
+   *
+   * This will create two compiled JS, one for each application.
+   *
+   */
   entry: {
-    mocha: "./test/main.test.ts",
-    quicktest: "./test/00_quick_test.ts",
-    index: "./src/index.ts"
+    library: "./src/index.ts"
   },
-
-  mode: "development",
-
-  watchOptions: {
-    poll: true,
-    aggregateTimeout: 300,
-    ignored: /node_modules/
-  },
-
+  mode: "production",
   target: "node",
-  devtool: "inline-source-map",
 
-  devServer: {
-    contentBase: "./build"
-  },
+  plugins: [
 
-  // These are functions that filters warnings based on the source module and
-  // the warning's message
-  ignoreWarnings: [
-
-    (warning, compilation) =>
-      (warning.module.resource).indexOf("chokidar") > -1,
-
-    (warning, compilation) =>
-      (warning.message).indexOf("the request of a dependency") > -1,
-
-    (warning, compilation) =>
-      (warning.message).indexOf("require function is used in a way in which dependencies cannot be statically extracted") > -1
+    new CleanWebpackPlugin()
 
   ],
 
   output: {
-    path: path.resolve(__dirname),
-    filename: "./build/[name].js"
+    filename: "index.js",
+    path: path.resolve(__dirname, "dist"),
+    libraryTarget: "umd",
+    library: libraryName
   },
 
   module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: "ts-loader",
-            options: {
-              transpileOnly: true,
-              experimentalWatchApi: true
-            }
-          }
-        ],
-        exclude: /node_modules/
+    rules: [{
+      test: /\.tsx?$/,
+      use: "ts-loader",
+      exclude: [
+
+        path.join(__dirname, "/node_modules/"),
+        path.join(__dirname, "/test/")
+
+      ]
+    }]
+  },
+
+  optimization: {
+
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      parallel: true,
+      terserOptions: {
+        mangle: {
+          toplevel: true
+        },
+        output: {
+          comments: false
+        }
       }
-    ]
+    })]
+
   },
 
   resolve: {
-    extensions: [ ".tsx", ".ts", ".js" ]
+    extensions: [".tsx", ".ts", ".js"]
   }
 
 }
