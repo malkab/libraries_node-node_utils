@@ -28,12 +28,20 @@ import * as yaml from "js-yaml";
  *
  * Writes a string to file asynchroneously.
  *
- * @param filePathName        The path of the file to be written inside the
- *                            folder of FEE.
- * @param txt                 The string to write.
- * @param config              Optional. The encoding to write to.
- * @returns                   An observable with the final path of the file
- *                            written, as a string.
+ * @param filePath
+ * The path of the file to be written inside the folder of FEE.
+ *
+ * @param txt
+ * The string to write.
+ *
+ * @param __namedParameters
+ * Options.
+ *
+ * @param __namedParameters.encoding
+ * The encoding to write to.
+ *
+ * @returns
+ * An observable with the final path of the file written, as a string.
  *
  */
 export function writeTxt$(filePath: string[], txt: any,
@@ -65,24 +73,35 @@ export function writeTxt$(filePath: string[], txt: any,
 
 /**
  *
- * Writes a JSON to file.
+ * Writes a string to file synchroneously.
  *
- * @param   filePathName      The path of the file to be written
- *                            inside the folder of FEE.
- * @param   json              The JSON to write.
- * @param   beautifySpaces    Set different to null to output
- *                            a beautiful JSON.
+ * @param filePath
+ * The path of the file to be written inside the folder of FEE.
+ *
+ * @param txt
+ * The string to write.
+ *
+ * @param __namedParameters
+ * Options.
+ *
+ * @param __namedParameters.encoding
+ * The encoding to write to.
+ *
+ * @returns
+ * An string with the final path of the file written.
  *
  */
 export function writeTxtSync(
   filePath: string[],
   txt: string,
   { encoding = "utf8" }: { encoding?: fs.ObjectEncodingOptions["encoding"]; } = {}
-): void {
+): string {
 
   const p: string = path.join(...filePath);
 
   fs.writeFileSync(p, txt, { encoding: encoding });
+
+  return p;
 
 }
 
