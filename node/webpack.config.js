@@ -5,7 +5,8 @@
  * Builds the library at src/index.ts.
  *
  */
-const libraryName = "the-library";
+// Configure this
+const libraryName = "node_utils";
 
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -30,6 +31,12 @@ module.exports = {
     new CleanWebpackPlugin()
 
   ],
+
+  // By uncommenting this line the library bundle is produced without external
+  // dependencies. That means a smaller size but leaves the library prone to
+  // external dependencies and thus to "dependency hell". As a rule of thumb, it
+  // is not recommended to compile the production bundle without externals.
+  // externals: [ nodeExternals() ],
 
   output: {
     filename: "index.js",
