@@ -1,6 +1,6 @@
 {
   "name": "@malkab/node-utils",
-  "version": "1.6.17",
+  "version": "2.1.4",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@malkab",
   "author": {
@@ -14,6 +14,9 @@
     "utils",
     "typescript"
   ],
+  "directories": {
+    "docs": "docs"
+  },
   "license": "UNLICENSED",
   "homepage": "https://github.com/owner/project#readme",
   "repository": {
@@ -22,58 +25,59 @@
   },
   "private": false,
   "scripts": {
-    "package-json-version": "echo 2020-10-11",
-    "clean": "rm -Rf build ; rm -Rf dist",
-    "quick-test": "npm-run-all --parallel service:watch:quick-test:server service:build",
-    "start": "npm-run-all --parallel service:watch:mocha:server service:build",
-    "build": "npm run clean ; npm run service:build-lib",
-    "build-with-docs": "npm run clean ; npm run service:build-lib ; npm run build-docs ; rm -Rf docs ; cp -R typedoc/build/html docs",
-    "build-docs": "cd typedoc ; ./html ; cd ..",
+    "clean": "rm -Rf build/* ; rm -Rf dist/* ; rm -Rf docs",
+    "quicktest": "npm-run-all --parallel service:nodemon:quicktest service:webpack:quicktest",
+    "start": "npm-run-all --parallel service:nodemon:mocha service:webpack:mocha",
+    "build": "yarn clean ; webpack --config webpack.config.js --progress",
     "publish-dev": "yarn build ; yarn publish --patch --no-git-tag-version",
-    "service:build-lib": "webpack --config webpack-production.config.js --progress",
-    "service:build": "webpack --progress --watch",
-    "service:watch:quick-test:server": "nodemon --inspect=0.0.0.0:9329 \"./build/quicktest.js\" --watch \"./build/quicktest.js\"",
-    "service:watch:mocha:server": "nodemon --ext js --watch ./build/ --exec 'mocha --timeout 20000 ./build/mocha.js || true'"
+    "publish-prod": "yarn build ; yarn build-docs ; yarn publish --no-git-tag-version",
+    "build-docs": "cd typedoc ; ./html ; cp -R build/html ../docs ; cd ..",
+    "service:nodemon:quicktest": "nodemon --ext js --watch ./build/quicktest.js --exec 'mocha ./build/quicktest.js || true'",
+    "service:nodemon:mocha": "nodemon --ext js --watch ./build/mocha.js --exec 'mocha ./build/mocha.js || true'",
+    "service:webpack:quicktest": "webpack --config webpack-quicktest.config.js --progress",
+    "service:webpack:mocha": "webpack --config webpack-mocha.config.js --progress"
   },
   "engines": {
-    "node": "^12.0.0"
+    "node": "^14.0.0"
   },
   "devDependencies": {
-    "@malkab/ts-utils": "^4.1.10",
+    "@malkab/ts-utils": "^5.0.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/chai": "^4.2.14",
     "@types/fs-extra": "^9.0.4",
-    "@types/get-folder-size": "^2.0.0",
-    "@types/mocha": "^7.0.0",
-    "@types/node": "^14.14.7",
-    "@types/node-forge": "^0.9.5",
+    "@types/get-folder-size": "^3.0.0",
+    "@types/mocha": "9.0.0",
+    "@types/node": "^16.0.0",
+    "@types/node-forge": "^0.10.0",
     "@types/papaparse": "^5.2.4",
     "@types/uid-generator": "^2.0.2",
     "chai": "^4.2.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "mocha": "^7.0.0",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "eslint": "^7.0.0",
+    "mocha": "^9.0.0",
     "nodemon": "^2.0.6",
     "npm-run-all": "^4.1.5",
     "terser": "^5.4.0",
-    "terser-webpack-plugin": "^4.0.0",
-    "ts-loader": "^8.0.11",
-    "ts-node": "^9.0.0",
-    "tslint": "^6.1.3",
-    "typedoc": "^0.19.2",
+    "terser-webpack-plugin": "^5.0.0",
+    "ts-loader": "^9.0.0",
+    "ts-node": "^10.0.0",
+    "typedoc": "0.22.4",
     "typescript": "^4.0.5",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.0.0",
-    "webpack-filter-warnings-plugin": "^1.2.1",
-    "webpack-node-externals": "^2.5.1"
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.0.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "@types/js-yaml": "^4.0.3",
     "bcryptjs": "^2.4.3",
-    "fs-extra": "^9.0.1",
-    "get-folder-size": "^2.0.1",
+    "fs-extra": "^10.0.0",
+    "get-folder-size": "^3.0.0",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
     "node-forge": "^0.10.0",
     "papaparse": "^5.3.0",
     "round-to": "^5.0.0",
-    "rxjs": "^6.6.2",
+    "rxjs": "^7.0.0",
     "uid-generator": "^2.0.0"
   }
 }

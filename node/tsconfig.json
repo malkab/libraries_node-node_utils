@@ -1,10 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Node 12",
+  "display": "Node 14",
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "target": "es2019",
+    "target": "es2020",
     "module": "commonjs",
     "declaration": true,
     "downlevelIteration": true,
@@ -23,10 +23,10 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "typeRoots": [
-      "node_modules/@types",
-      "src/@types"
+      "node_modules/@types"
     ],
-    "lib": ["es2019", "es2020.promise", "es2020.bigint", "es2020.string"]
+    "types": [ "node", "webpack" ],
+    "lib": ["es2020", "es2020.promise", "es2020.bigint", "es2020.string"]
   },
   "include": [ "src" ],
   "exclude": [ "node_modules" ]

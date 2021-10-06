@@ -14,7 +14,9 @@ import * as papaparse from "papaparse";
 
 import * as fs from 'fs-extra';
 
-import { BaseEncodingOptions } from 'fs-extra';
+import { ObjectEncodingOptions } from 'fs-extra';
+
+import * as yaml from "js-yaml";
 
 /**
  *
@@ -24,18 +26,26 @@ import { BaseEncodingOptions } from 'fs-extra';
 
 /**
  *
- * Writes a TXT to file.
+ * Writes a string to file asynchroneously.
  *
- * @param filePathName        The path of the file to be written
- *                            inside the folder of FEE.
- * @param json                The JSON to write.
- * @returns                   The final path of the file written, as a string.
+ * @param filePath
+ * The path of the file to be written inside the folder of FEE.
+ *
+ * @param txt
+ * The string to write.
+ *
+ * @param __namedParameters
+ * Options.
+ *
+ * @param __namedParameters.encoding
+ * The encoding to write to.
+ *
+ * @returns
+ * An observable with the final path of the file written, as a string.
  *
  */
-export function writeTxt$(
-  filePath: string[],
-  txt: any,
-  { encoding = "utf8" }: { encoding?: fs.BaseEncodingOptions["encoding"]; } = {}
+export function writeTxt$(filePath: string[], txt: any,
+  { encoding = "utf8" }: { encoding?: fs.ObjectEncodingOptions["encoding"]; } = {}
 ): rx.Observable<string> {
 
   return new rx.Observable<string>((o: any) => {
@@ -63,30 +73,98 @@ export function writeTxt$(
 
 /**
  *
- * Writes a JSON to file.
+ * Writes a string to file synchroneously.
  *
- * @param   filePathName      The path of the file to be written
- *                            inside the folder of FEE.
- * @param   json              The JSON to write.
- * @param   beautifySpaces    Set different to null to output
- *                            a beautiful JSON.
+ * @param filePath
+ * The path of the file to be written inside the folder of FEE.
+ *
+ * @param txt
+ * The string to write.
+ *
+ * @param __namedParameters
+ * Options.
+ *
+ * @param __namedParameters.encoding
+ * The encoding to write to.
+ *
+ * @returns
+ * An string with the final path of the file written.
  *
  */
 export function writeTxtSync(
   filePath: string[],
   txt: string,
-  { encoding = "utf8" }: { encoding?: fs.BaseEncodingOptions["encoding"]; } = {}
-): void {
+  { encoding = "utf8" }: { encoding?: fs.ObjectEncodingOptions["encoding"]; } = {}
+): string {
 
   const p: string = path.join(...filePath);
 
   fs.writeFileSync(p, txt, { encoding: encoding });
 
+  return p;
+
 }
 
 /**
  *
- * Writes a JSON to file.
+ * Reads a YAML file asynchronously.
+ *
+ * @param filePath
+ * The path to the file to open.
+ *
+ * @param __namedParameters
+ * Options.
+ *
+ * @param __namedParameters.encoding
+ * Encoding.
+ *
+ * @returns
+ * The parsed object from the YAML.
+ *
+ */
+export function readYaml$(
+  filePath: string[],
+  { encoding = "utf8" }: { encoding?: string } = {}
+): rx.Observable<any> {
+
+  const p: string = path.join(...filePath);
+
+  return rx.from(fs.readFile(p, encoding)
+    .then((a: string) => yaml.load(a)));
+
+}
+
+/**
+ *
+ * Reads a YAML file synchronously.
+ *
+ * @param filePath
+ * The path to the file to open.
+ *
+ * @param __namedParameters
+ * Encoding of data.
+ *
+ * @param encoding
+ * Encoding.
+ *
+ * @returns
+ * The parsed object from the YAML.
+ *
+ */
+export function readYamlSync(
+  filePath: string[],
+  { encoding = "utf8" }: { encoding?: ObjectEncodingOptions["encoding"] } = {}
+): any {
+
+  const p: string = path.join(...filePath);
+
+  return yaml.load(<string>fs.readFileSync(p, { encoding: encoding }));
+
+}
+
+/**
+ *
+ * Reads a JSON asynchronously.
  *
  * @param   filePathName      The path of the file to be written
  *                            inside the folder of FEE.
@@ -107,7 +185,7 @@ export function readJson$(
 
 /**
  *
- * Reads a JSON file.
+ * Reads a JSON file synchronously.
  *
  */
 export function readJsonSync(
@@ -148,7 +226,7 @@ export function readFile$(
  */
 export function readFileSync(
   filePath: string[],
-  { encoding = "utf8" }: { encoding?: BaseEncodingOptions["encoding"] } = {}
+  { encoding = "utf8" }: { encoding?: ObjectEncodingOptions["encoding"] } = {}
 ): any {
 
   const p: string = path.join(...filePath);
@@ -209,7 +287,7 @@ export function readFileLinesSync(
     cleanEmptyLines = true,
     trim = true
   }: {
-    encoding?: BaseEncodingOptions["encoding"];
+    encoding?: ObjectEncodingOptions["encoding"];
     cleanEmptyLines?: boolean;
     trim?: boolean;
   } = {}
@@ -569,15 +647,16 @@ export function getFolderSize(folder: string): rx.Observable<number> {
 
   return new rx.Observable<number>((o: any) => {
 
-    getFolderSizeFunction(folder, (err: Error | null, size: number) => {
+    getFolderSizeFunction(folder, { })
+    .then((out: { size: number, errors: any }) => {
 
-      if (err) {
+      if (out.errors) {
 
-        o.error(err);
+        o.error(out.errors);
 
       } else {
 
-        o.next(size);
+        o.next(out.size);
         o.complete();
 
       }
@@ -864,12 +943,15 @@ export function writeCsvSync(filePath: string[], data: any, {
 
 /**
  *
- * Read a CSV with Papaparse. Check papaparse options at the papaparse page.
+ * Write a JSON to a CSV file. Check papaparse options at the papaparse page.
  *
+ * @param     file    The path of the file to be written.
+ * @param     data    The JSON to be written.
+ * @param     config  papaparse options to write the file.
  * @returns           The path of the file written as a string.
  *
  */
-export function writeCsv$(file: string[], data: any, {
+export function writeJsonAsCsv$(file: string[], data: any, {
     encoding = <BufferEncoding>"utf8",
     delimiter,
     quotes,
