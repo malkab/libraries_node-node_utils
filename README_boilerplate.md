@@ -32,11 +32,11 @@ Steps:
 
 - [] for a release publish, test the package with **yarn pack** and then **yarn publish-prod**. Start new projects always at **version 0.0.1**. When reaching version 1.0.0, **0 or odd** minor versions means stable versions and **even** minor version number unstable ones. Only change major version changes on truly backward incompatible changes. **LET THE CODE MATURE BEFORE COMITTING ODD MINOR VERSION NUMBERS**;
 
-- [] close the Git Flow feature and go back to **develop**, if any. Get a clear idea of changes in the current version;
+- [] close the **Git Flow Feature** and go back to **develop**, if any. Get a clear idea of changes in the current version;
 
-- [] if applicable, create a new Git Flow Release;
+- [] if applicable, create a new **Git Flow Release**;
 
-- [] push all branches and tags to GitLab:
+- [] push all branches and tags to **GitHub**:
 
 ```Shell
 # This will push ALL branches to origin, even the non-existant ones. Remove sporious branches with git push origin :branch_name
