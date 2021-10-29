@@ -1,58 +1,82 @@
-const path = require('path');
-const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
+/**
+ *
+ * Webpack 5
+ *
+ * Builds the library at src/index.ts.
+ *
+ */
+// Configure this
+const libraryName = "node_utils";
+
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const nodeExternals = require("webpack-node-externals");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
+
+  /**
+   *
+   * This will create two compiled JS, one for each application.
+   *
+   */
   entry: {
-    mocha: "./src/test/main.test.ts",
-    quicktest: "./src/test/00-quick-test.ts"
+    library: "./src/index.ts"
   },
-  mode: "development",
-  watch: true,
+  mode: "production",
   target: "node",
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './build'
-  },
-  watchOptions: {
-    poll: true,
-    ignored: /node_modules/
-  },
+
+  plugins: [
+
+    new CleanWebpackPlugin()
+
+  ],
+
+  // By uncommenting this line the library bundle is produced without external
+  // dependencies. That means a smaller size but leaves the library prone to
+  // external dependencies and thus to "dependency hell". As a rule of thumb, it
+  // is not recommended to compile the production bundle without externals.
+  // externals: [ nodeExternals() ],
 
   output: {
-    path: path.resolve(__dirname),
-    filename: './build/[name].js'
+    filename: "index.js",
+    path: path.resolve(__dirname, "dist"),
+    libraryTarget: "umd",
+    library: libraryName
   },
 
   module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true,
-              experimentalWatchApi: true
-            }
-          }
-        ],
-        exclude: /node_modules/
-      }
-    ]
+    rules: [{
+      test: /\.tsx?$/,
+      use: "ts-loader",
+      exclude: [
+
+        path.join(__dirname, "/node_modules/"),
+        path.join(__dirname, "/test/")
+
+      ]
+    }]
   },
 
-  node: {
-    fs: "empty"
+  optimization: {
+
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      parallel: true,
+      terserOptions: {
+        mangle: {
+          toplevel: true
+        },
+        output: {
+          comments: false
+        }
+      }
+    })]
+
   },
 
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
-  },
+    extensions: [".tsx", ".ts", ".js"]
+  }
 
-  plugins: [
-    new FilterWarningsPlugin({
-      exclude: /Critical dependency: the request of a dependency is an expression/
-    })
-  ]
-
-};
+}

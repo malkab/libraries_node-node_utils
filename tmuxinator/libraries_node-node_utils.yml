@@ -1,0 +1,8 @@
+name: node_utils
+root: /home/git/libraries_node/libraries_node-node_utils
+
+windows:
+
+  - docker-dev:
+      cd docker ;
+      clear

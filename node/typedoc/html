@@ -7,8 +7,6 @@ TYPEDOC_EXEC=../node_modules/.bin/typedoc
 ROOT_BUILD_DIR=./build
 BUILD_DIR=$ROOT_BUILD_DIR/html
 
-echo Building target $TARGET
-
 rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
 
@@ -18,4 +16,6 @@ endmsg
 
 $TYPEDOC_EXEC \
     --out $BUILD_DIR/ \
+    --media resources \
+    --includes includes \
     --options ./typedoc.json

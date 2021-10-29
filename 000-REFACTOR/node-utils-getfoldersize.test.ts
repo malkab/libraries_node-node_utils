@@ -12,9 +12,9 @@ Quick Test
 
 `);
 
-import * as u from "../../lib/index";
+import { NodeUtilsFiles } from "../../src/index";
 
-u.NodeUtilsFiles.getFolderSize("/ext_src")
+NodeUtilsFiles.getFolderSize("/ext_src")
 .subscribe(
 
   (o: number) => console.log("D: next", o),
@@ -25,9 +25,7 @@ u.NodeUtilsFiles.getFolderSize("/ext_src")
 
 )
 
-
-
-u.NodeUtilsFiles.getFolderSizeReport("/ext_src", "/bin", "/etc")
+NodeUtilsFiles.getFolderSizeReport("/ext_src", "/bin", "/etc")
 .subscribe(
 
   (o: number[]) => console.log("D: next", o),

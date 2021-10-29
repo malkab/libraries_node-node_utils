@@ -7,3 +7,7 @@ export * from "./nodeutilsfiles";
 export * from "./idockerinfo";
 
 export * from "./nodeutilssystemstatus";
+
+export * from "./nodeutilsaxios";
+
+export * from "./nodeutilsenvvarsstorage";

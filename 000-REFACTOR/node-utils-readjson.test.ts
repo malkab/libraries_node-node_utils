@@ -12,7 +12,7 @@ Quick Test
 
 `);
 
-import { NodeUtilsFiles } from "../../lib/index";
+import { } from "../../src/index";
 
 NodeUtilsFiles.readJson$(".", "package.json").subscribe(
 
