@@ -1,6 +1,6 @@
 {
   "name": "@malkab/node-utils",
-  "version": "2.1.7",
+  "version": "3.0.0",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@malkab",
   "author": {

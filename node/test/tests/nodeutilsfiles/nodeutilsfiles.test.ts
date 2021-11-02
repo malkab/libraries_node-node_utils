@@ -2,9 +2,11 @@ import { rxMochaTests } from "@malkab/ts-utils";
 
 import { deleteFolderSync, deleteFolderContentSync, getFolderContentSync, copy$,
   getFolderContent$, deleteFolderContent$, deleteFolder$, copySync, readYaml$,
-  readYamlSync } from "../../../src/index";
+  readYamlSync, writeYamlSync, writeYaml$} from "../../../src/index";
 
 import { expect } from "chai";
+
+import * as rxo from "rxjs/operators";
 
 /**
  *
@@ -65,7 +67,7 @@ describe("Test getFolderContent$", function() {
     assertions: [
 
       (o: any) => expect(o).to.be.deep.equal(
-        [ 'csv_test.csv', 'test_folder_a', 'test_folder_b', 'yaml.yaml' ])
+        [ 'csv_test.csv', "outputs", 'test_folder_a', 'test_folder_b', 'yaml.yaml' ])
 
     ]
 
@@ -156,8 +158,8 @@ describe("Test getFolderContentSync", function() {
 
     expect(getFolderContentSync(
       [ "test", "tests", "nodeutilsfiles", "assets_copy" ]))
-      .to.be.deep.equal([ 'csv_test.csv', 'test_folder_a', 'test_folder_b',
-      'yaml.yaml' ]);
+      .to.be.deep.equal([ 'csv_test.csv', "outputs", 'test_folder_a',
+      'test_folder_b', 'yaml.yaml' ]);
 
   });
 
@@ -224,6 +226,48 @@ describe("Test readYaml$", function() {
 
 /**
  *
+ * Test writeYaml$.
+ *
+ */
+ describe("Test writeYaml$", function() {
+
+  rxMochaTests({
+
+    testCaseName: "Test writeYaml$",
+
+    observables: [
+
+      readYaml$(
+        [ "test", "tests", "nodeutilsfiles", "assets", "yaml.yaml" ]
+      ).pipe(
+
+        rxo.concatMap((object: any) => {
+
+          return writeYaml$(
+            [ "test", "tests", "nodeutilsfiles", "assets", "outputs", "yaml2.yaml" ],
+            object)
+
+        })
+
+      )
+
+    ],
+
+    assertions: [
+
+      (o: any) => expect(o).to.be.equal(
+        "test/tests/nodeutilsfiles/assets/outputs/yaml2.yaml")
+
+    ],
+
+    verbose: false
+
+  })
+
+})
+
+/**
+ *
  * Test readYamlSync.
  *
  */
@@ -234,6 +278,29 @@ describe("Test readYamlSync", function() {
     expect(readYamlSync(
       [ "test", "tests", "nodeutilsfiles", "assets", "yaml.yaml" ])
       .ssh["kepler-remote"].host).to.be.equal("the_default_host");
+
+  });
+
+})
+
+/**
+ *
+ * Test writeYamlSync.
+ *
+ */
+ describe("Test writeYamlSync", function() {
+
+  it("Test writeYamlSync", function() {
+
+    const a: any = readYamlSync(
+      [ "test", "tests", "nodeutilsfiles", "assets", "yaml.yaml" ]);
+
+    const b: string = writeYamlSync(
+      [ "test", "tests", "nodeutilsfiles", "assets", "outputs", "yaml.yaml" ],
+      a);
+
+    expect(b).to.be.equal(
+      "test/tests/nodeutilsfiles/assets/outputs/yaml.yaml");
 
   });
 

@@ -33,7 +33,7 @@ import * as fs from "fs";
  * - method (string): the method used in the request
  *
  */
-export function axiosSaveFile({
+export function axiosSaveFile$({
     url,
     filePath
   }: {
