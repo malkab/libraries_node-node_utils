@@ -34,8 +34,18 @@ import { writeTxt$, writeTxtSync } from "../files/txt";
 
   const p: string = path.join(...filePath);
 
-  return rx.from(fs.readFile(p, encoding)
-    .then((a: string) => yaml.load(a)));
+  return new rx.Observable<any>((o: any) => {
+
+    fs.readFile(p, encoding)
+      .then((a: string) => {
+
+        o.next(yaml.load(a));
+        o.complete();
+
+      })
+      .catch((a: any) => o.error(a));
+
+  })
 
 }
 

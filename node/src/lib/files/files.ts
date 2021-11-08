@@ -6,7 +6,7 @@ import * as rxo from "rxjs/operators";
 
 import * as child_process from "child_process";
 
-import roundTo from "round-to";
+import { roundTo } from "round-to";
 
 import getFolderSizeFunction from "get-folder-size";
 

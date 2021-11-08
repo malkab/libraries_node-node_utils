@@ -18,85 +18,63 @@ import { writeTxtSync,writeTxt$ } from "./txt";
  export function readCsvSync(filePath: string[], {
   encoding = <BufferEncoding>"utf8",
   delimiter,
-  newline,
+  newline = "\n",
   quoteChar,
   escapeChar,
   header,
   transformHeader,
   dynamicTyping,
   preview,
-  worker,
   comments,
   complete,
   step,
-  error,
-  download,
-  downloadRequestHeaders,
   skipEmptyLines,
-  chunk,
-  chunkSize,
   fastMode,
   beforeFirstChunk,
-  withCredentials,
   transform,
   delimitersToGuess,
 }: {
   encoding?: BufferEncoding;
   delimiter?: string;
-  newline?: string;
+  newline?: any;
   quoteChar?: string;
   escapeChar?: string;
   header?: boolean;
   transformHeader?: (x: any) => any;
   dynamicTyping?: boolean;
   preview?: number;
-  worker?: boolean;
   comments?: string;
   complete?: (x: any) => any;
   step?: (x: any) => any;
-  error?: (x: papaparse.ParseError, f: any) => any;
-  download?: boolean;
-  downloadRequestHeaders?: any;
   skipEmptyLines?: boolean;
-  chunk?: (x: any) => any;
-  chunkSize?: any;
   fastMode?: boolean;
   beforeFirstChunk?: (x: any) => any;
-  withCredentials?: boolean;
   transform?: (x: any) => any;
-  delimitersToGuess?: papaparse.GuessableDelimiters[];
+  delimitersToGuess?: string[];
 }): any {
 
-const p: string = path.join(...filePath);
+  const p: string = path.join(...filePath);
 
-const f: any = fs.readFileSync(p, { encoding: encoding })
+  const f: any = fs.readFileSync(p, { encoding: encoding })
 
-return papaparse.parse(f, {
-  encoding: encoding,
-  delimiter: delimiter,
-  newline: newline,
-  quoteChar: quoteChar,
-  escapeChar: escapeChar,
-  header: header,
-  transformHeader: transformHeader,
-  dynamicTyping: dynamicTyping,
-  preview: preview,
-  worker: worker,
-  comments: comments,
-  complete: complete,
-  step: step,
-  error: error,
-  download: download,
-  downloadRequestHeaders: downloadRequestHeaders,
-  skipEmptyLines: skipEmptyLines,
-  chunk: chunk,
-  chunkSize: chunkSize,
-  fastMode: fastMode,
-  beforeFirstChunk: beforeFirstChunk,
-  withCredentials: withCredentials,
-  transform: transform,
-  delimitersToGuess: delimitersToGuess
-})
+  return papaparse.parse(f, {
+    delimiter: delimiter,
+    newline: newline,
+    quoteChar: quoteChar,
+    escapeChar: escapeChar,
+    header: header,
+    transformHeader: transformHeader,
+    dynamicTyping: dynamicTyping,
+    preview: preview,
+    comments: comments,
+    complete: complete,
+    step: step,
+    skipEmptyLines: skipEmptyLines,
+    fastMode: fastMode,
+    beforeFirstChunk: beforeFirstChunk,
+    transform: transform,
+    delimitersToGuess: delimitersToGuess
+  })
 
 }
 
@@ -108,53 +86,39 @@ return papaparse.parse(f, {
 export function readCsv$(filePath: string[], {
   encoding = <BufferEncoding>"utf8",
   delimiter,
-  newline,
+  newline = "\n",
   quoteChar,
   escapeChar,
   header,
   transformHeader,
   dynamicTyping,
   preview,
-  worker,
   comments,
   complete,
   step,
-  error,
-  download,
-  downloadRequestHeaders,
   skipEmptyLines,
-  chunk,
-  chunkSize,
   fastMode,
   beforeFirstChunk,
-  withCredentials,
   transform,
-  delimitersToGuess,
+  delimitersToGuess
 }: {
-  encoding?: BufferEncoding;
+  encoding?: any;
   delimiter?: string;
-  newline?: string;
+  newline?: any;
   quoteChar?: string;
   escapeChar?: string;
   header?: boolean;
   transformHeader?: (x: any) => any;
   dynamicTyping?: boolean;
   preview?: number;
-  worker?: boolean;
   comments?: string;
   complete?: (x: any) => any;
   step?: (x: any) => any;
-  error?: (x: papaparse.ParseError, f: any) => any;
-  download?: boolean;
-  downloadRequestHeaders?: any;
   skipEmptyLines?: boolean;
-  chunk?: (x: any) => any;
-  chunkSize?: any;
   fastMode?: boolean;
   beforeFirstChunk?: (x: any) => any;
-  withCredentials?: boolean;
   transform?: (x: any) => any;
-  delimitersToGuess?: papaparse.GuessableDelimiters[];
+  delimitersToGuess?: string[];
 }): rx.Observable<any> {
 
 const p: string = path.join(...filePath);
@@ -162,10 +126,9 @@ const p: string = path.join(...filePath);
 return rx.from(fs.readFile(p, { encoding: encoding }))
 .pipe(
 
-  rxo.map((o: string): any => {
+  rxo.map((o: any): any => {
 
     return papaparse.parse(o, {
-      encoding: encoding,
       delimiter: delimiter,
       newline: newline,
       quoteChar: quoteChar,
@@ -174,19 +137,12 @@ return rx.from(fs.readFile(p, { encoding: encoding }))
       transformHeader: transformHeader,
       dynamicTyping: dynamicTyping,
       preview: preview,
-      worker: worker,
       comments: comments,
       complete: complete,
       step: step,
-      error: error,
-      download: download,
-      downloadRequestHeaders: downloadRequestHeaders,
       skipEmptyLines: skipEmptyLines,
-      chunk: chunk,
-      chunkSize: chunkSize,
       fastMode: fastMode,
       beforeFirstChunk: beforeFirstChunk,
-      withCredentials: withCredentials,
       transform: transform,
       delimitersToGuess: delimitersToGuess
     })

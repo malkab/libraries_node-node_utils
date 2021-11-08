@@ -15,6 +15,9 @@ module.exports = {
 
   mode: "development",
 
+  // Comment to check warnings
+  stats: "errors-only",
+
   watch: true,
 
   watchOptions: {
@@ -39,7 +42,13 @@ module.exports = {
 
     (warning, compilation) =>
       (warning.module.resource).indexOf("mocha") > -1 &&
-        (warning.message).indexOf("the request of a dependency") > -1
+       (warning.message).indexOf("the request of a dependency") > -1,
+
+   (warning, compilation) =>
+     (warning.message).indexOf("the request of a dependency") > -1,
+
+    (warning, compilation) =>
+      (warning.message).indexOf("Critical dependency: require function is used in a way in which dependencies cannot be statically extracted") > -1
 
   ],
 

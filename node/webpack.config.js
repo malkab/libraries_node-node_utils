@@ -5,7 +5,6 @@
  * Builds the library at src/index.ts.
  *
  */
-// Configure this
 const libraryName = "node_utils";
 
 const path = require("path");
@@ -29,6 +28,25 @@ module.exports = {
   plugins: [
 
     new CleanWebpackPlugin()
+
+  ],
+
+  // These are functions that filters warnings based on the source module and
+  // the warning's message
+  ignoreWarnings: [
+
+    (warning, compilation) =>
+      (warning.module.resource).indexOf("chokidar") > -1,
+
+    (warning, compilation) =>
+      (warning.module.resource).indexOf("mocha") > -1 &&
+        (warning.message).indexOf("the request of a dependency") > -1,
+
+    (warning, compilation) =>
+      (warning.message).indexOf("the request of a dependency") > -1,
+
+    (warning, compilation) =>
+      (warning.message).indexOf("Critical dependency: require function is used in a way in which dependencies cannot be statically extracted") > -1
 
   ],
 

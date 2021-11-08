@@ -67,7 +67,7 @@ describe("Test getFolderContent$", function() {
     assertions: [
 
       (o: any) => expect(o).to.be.deep.equal(
-        [ 'csv_test.csv', "outputs", 'test_folder_a', 'test_folder_b', 'yaml.yaml' ])
+        [ ".gitignore", 'csv_test.csv', "outputs", 'test_folder_a', 'test_folder_b', 'yaml.yaml' ])
 
     ]
 
@@ -158,7 +158,7 @@ describe("Test getFolderContentSync", function() {
 
     expect(getFolderContentSync(
       [ "test", "tests", "nodeutilsfiles", "assets_copy" ]))
-      .to.be.deep.equal([ 'csv_test.csv', "outputs", 'test_folder_a',
+      .to.be.deep.equal([ ".gitignore", 'csv_test.csv', "outputs", 'test_folder_a',
       'test_folder_b', 'yaml.yaml' ]);
 
   });
@@ -226,6 +226,37 @@ describe("Test readYaml$", function() {
 
 /**
  *
+ * Test readYaml$ file not found.
+ *
+ */
+ describe("Test readYaml$ file not found", function() {
+
+  rxMochaTests({
+
+    testCaseName: "Test readYaml$ file not found",
+
+    observables: [ readYaml$(
+      [ "test", "tests", "nodeutilsfiles", "assets", "yaml2.yaml" ]) ],
+
+    assertions: [
+
+      (o: any) => {
+
+        expect(o.message)
+          .to.be.equal("ENOENT: no such file or directory, open 'test/tests/nodeutilsfiles/assets/yaml2.yaml'");
+
+      }
+
+    ],
+
+    verbose: false
+
+  })
+
+})
+
+/**
+ *
  * Test writeYaml$.
  *
  */
@@ -278,6 +309,24 @@ describe("Test readYamlSync", function() {
     expect(readYamlSync(
       [ "test", "tests", "nodeutilsfiles", "assets", "yaml.yaml" ])
       .ssh["kepler-remote"].host).to.be.equal("the_default_host");
+
+  });
+
+})
+
+/**
+ *
+ * Test readYamlSync file not found.
+ *
+ */
+describe("Test readYamlSync file not found", function() {
+
+  it("Test readYamlSync file not found", function() {
+
+    expect(() => readYamlSync(
+      [ "test", "tests", "nodeutilsfiles", "assets", "yaml_not_exists.yaml" ])
+      .ssh["kepler-remote"].host)
+      .to.throw("ENOENT: no such file or directory, open 'test/tests/nodeutilsfiles/assets/yaml_not_exists.yaml'");
 
   });
 

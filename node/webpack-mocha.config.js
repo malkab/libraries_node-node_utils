@@ -15,9 +15,10 @@ module.exports = {
 
   mode: "development",
 
-  watch: true,
-
+  // Comment to check warnings
   stats: "errors-only",
+
+  watch: true,
 
   watchOptions: {
     poll: 200,
@@ -38,6 +39,10 @@ module.exports = {
 
     (warning, compilation) =>
       (warning.module.resource).indexOf("chokidar") > -1,
+
+    (warning, compilation) =>
+      (warning.module.resource).indexOf("mocha") > -1 &&
+        (warning.message).indexOf("the request of a dependency") > -1,
 
     (warning, compilation) =>
       (warning.message).indexOf("the request of a dependency") > -1,
