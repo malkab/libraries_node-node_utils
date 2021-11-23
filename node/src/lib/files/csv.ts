@@ -15,7 +15,7 @@ import { writeTxtSync,writeTxt$ } from "./txt";
  * Read a CSV with Papaparse. Check papaparse options at the papaparse page.
  *
  */
- export function readCsvSync(filePath: string[], {
+export function readCsvSync(filePath: string[], {
   encoding = <BufferEncoding>"utf8",
   delimiter,
   newline = "\n",
@@ -51,6 +51,9 @@ import { writeTxtSync,writeTxt$ } from "./txt";
   beforeFirstChunk?: (x: any) => any;
   transform?: (x: any) => any;
   delimitersToGuess?: string[];
+} = {
+  encoding: <BufferEncoding>"utf8",
+  newline: "\n"
 }): any {
 
   const p: string = path.join(...filePath);
@@ -119,6 +122,9 @@ export function readCsv$(filePath: string[], {
   beforeFirstChunk?: (x: any) => any;
   transform?: (x: any) => any;
   delimitersToGuess?: string[];
+} = {
+  encoding: <BufferEncoding>"utf8",
+  newline: "\n"
 }): rx.Observable<any> {
 
 const p: string = path.join(...filePath);
