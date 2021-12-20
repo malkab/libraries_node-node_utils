@@ -8,7 +8,7 @@ import * as papaparse from "papaparse";
 
 import * as fs from 'fs-extra';
 
-import { writeTxtSync,writeTxt$ } from "./txt";
+import { writeTxtSync,writeTxt$ } from "./txt";
 
 /**
  *
