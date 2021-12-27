@@ -31,7 +31,7 @@
     "build": "yarn clean ; webpack --config webpack.config.js --progress",
     "publish-dev": "yarn build ; yarn publish --patch --no-git-tag-version",
     "publish-prod": "yarn build ; yarn build-docs ; yarn publish --no-git-tag-version",
-    "build-docs": "cd typedoc ; ./html ; cp -R build/html ../docs ; cd ..",
+    "build-docs": "cd typedoc ; ./html ; rm -Rf ../../docs ; cp -R build/html ../../docs ; cd ..",
     "service:nodemon:quicktest": "nodemon --ext js --watch ./build/quicktest.js --exec 'mocha ./build/quicktest.js || true'",
     "service:nodemon:mocha": "nodemon --ext js --watch ./build/mocha.js --exec 'mocha ./build/mocha.js || true'",
     "service:webpack:quicktest": "webpack --config webpack-quicktest.config.js --progress",
