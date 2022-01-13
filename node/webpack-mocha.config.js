@@ -1,10 +1,10 @@
 /**
- *
- * Webpack 5
- *
- * Builds the Mocha tests under watch.
- *
- */
+*
+* Webpack 5
+*
+* Builds the Mocha tests under watch.
+*
+*/
 const path = require("path");
 
 module.exports = {
@@ -13,6 +13,7 @@ module.exports = {
     mocha: "./test/main.test.ts"
   },
 
+  target: "node",
   mode: "development",
 
   // Comment to check warnings
@@ -26,7 +27,6 @@ module.exports = {
     ignored: /node_modules/
   },
 
-  target: "node",
   devtool: "inline-source-map",
 
   devServer: {
@@ -54,7 +54,8 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname),
-    filename: "./build/[name].js"
+    filename: "./build/[name].js",
+    clean: true
   },
 
   module: {
