@@ -1,9 +1,11 @@
 /**
- * 
+ *
  * This class handle the read and storage of app-global variables that
  * are initialised from env vars.
- * 
+ *
  */
+export module envvarsstorage {
+
 export class EnvVarsStorage {
 
   // The storage
@@ -22,9 +24,9 @@ export class EnvVarsStorage {
   }
 
   /**
-   * 
+   *
    * Constructor
-   * 
+   *
    */
   constructor(...envVarsNames: string[]) {
 
@@ -45,5 +47,7 @@ export class EnvVarsStorage {
     });
 
   }
+
+}
 
 }
