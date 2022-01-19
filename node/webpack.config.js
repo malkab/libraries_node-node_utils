@@ -1,15 +1,13 @@
 /**
- *
- * Webpack 5
- *
- * Builds the library at src/index.ts.
- *
- */
-// Configure this
+*
+* Webpack 5
+*
+* Builds the library at src/index.ts.
+*
+*/
 const libraryName = "node_utils";
 
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 const TerserPlugin = require("terser-webpack-plugin");
 
@@ -23,12 +21,29 @@ module.exports = {
   entry: {
     library: "./src/index.ts"
   },
-  mode: "production",
+
   target: "node",
+  mode: "production",
 
-  plugins: [
+  // Comment to check warnings
+  stats: "errors-only",
 
-    new CleanWebpackPlugin()
+  // These are functions that filters warnings based on the source module and
+  // the warning's message
+  ignoreWarnings: [
+
+    (warning, compilation) =>
+      (warning.module.resource).indexOf("chokidar") > -1,
+
+    (warning, compilation) =>
+      (warning.module.resource).indexOf("mocha") > -1 &&
+        (warning.message).indexOf("the request of a dependency") > -1,
+
+    (warning, compilation) =>
+      (warning.message).indexOf("the request of a dependency") > -1,
+
+    (warning, compilation) =>
+      (warning.message).indexOf("Critical dependency: require function is used in a way in which dependencies cannot be statically extracted") > -1
 
   ],
 
@@ -42,7 +57,8 @@ module.exports = {
     filename: "index.js",
     path: path.resolve(__dirname, "dist"),
     libraryTarget: "umd",
-    library: libraryName
+    library: libraryName,
+    clean: true
   },
 
   module: {

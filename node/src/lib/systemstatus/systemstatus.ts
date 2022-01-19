@@ -1,6 +1,6 @@
 import * as nodeProcess from "process";
 
-import roundTo from "round-to";
+import { roundTo } from "round-to";
 
 import * as nodeOs from "os";
 
@@ -9,12 +9,13 @@ import * as nodeOs from "os";
  * System status utils.
  *
  */
+export module systemstatus {
 
 /**
- *
- * Returns Node memory usage, crude.
- *
- */
+*
+* Returns Node memory usage, crude.
+*
+*/
 export function nodeMemoryUsage() {
 
   return nodeProcess.memoryUsage();
@@ -22,10 +23,10 @@ export function nodeMemoryUsage() {
 }
 
 /**
- *
- * Return Node memory usage, report format.
- *
- */
+*
+* Return Node memory usage, report format.
+*
+*/
 export function nodeMemoryUsageReport() {
 
   const mu: any = nodeProcess.memoryUsage();
@@ -71,10 +72,10 @@ export function nodeMemoryUsageReport() {
 }
 
 /**
- *
- * Returns a total and free system memory, crude.
- *
- */
+*
+* Returns a total and free system memory, crude.
+*
+*/
 export function systemMemoryUsage() {
 
   return {
@@ -88,10 +89,10 @@ export function systemMemoryUsage() {
 }
 
 /**
- *
- * Returns a total and free system memory, report.
- *
- */
+*
+* Returns a total and free system memory, report.
+*
+*/
 export function systemMemoryUsageReport() {
 
   const mu: any = systemMemoryUsage();
@@ -129,12 +130,12 @@ export function systemMemoryUsageReport() {
 }
 
 /**
- *
- * Returns really crude and imprecise average CPU info, only for comparisson
- * monitoring. No real units, no percentages, just a syntetic indicator of
- * activity.
- *
- */
+*
+* Returns really crude and imprecise average CPU info, only for comparisson
+* monitoring. No real units, no percentages, just a syntetic indicator of
+* activity.
+*
+*/
 export function cpuReport() {
 
   const c: any[] = nodeOs.cpus();
@@ -174,5 +175,7 @@ export function cpuReport() {
     avgIdle: roundTo(avg(idleT) / 100000, 2)
 
   }
+
+}
 
 }

@@ -1,10 +1,10 @@
 /**
- *
- * Webpack 5
- *
- * Builds the Mocha tests under watch.
- *
- */
+*
+* Webpack 5
+*
+* Builds the Mocha tests under watch.
+*
+*/
 const path = require("path");
 
 module.exports = {
@@ -13,11 +13,13 @@ module.exports = {
     mocha: "./test/main.test.ts"
   },
 
+  target: "node",
   mode: "development",
 
-  watch: true,
-
+  // Comment to check warnings
   stats: "errors-only",
+
+  watch: true,
 
   watchOptions: {
     poll: 200,
@@ -25,7 +27,6 @@ module.exports = {
     ignored: /node_modules/
   },
 
-  target: "node",
   devtool: "inline-source-map",
 
   devServer: {
@@ -40,6 +41,10 @@ module.exports = {
       (warning.module.resource).indexOf("chokidar") > -1,
 
     (warning, compilation) =>
+      (warning.module.resource).indexOf("mocha") > -1 &&
+        (warning.message).indexOf("the request of a dependency") > -1,
+
+    (warning, compilation) =>
       (warning.message).indexOf("the request of a dependency") > -1,
 
     (warning, compilation) =>
@@ -48,8 +53,9 @@ module.exports = {
   ],
 
   output: {
-    path: path.resolve(__dirname),
-    filename: "./build/[name].js"
+    filename: "[name].js",
+    path: path.resolve(__dirname, "build"),
+    clean: true
   },
 
   module: {
