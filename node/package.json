@@ -1,6 +1,6 @@
 {
   "name": "@malkab/node-utils",
-  "version": "3.2.0",
+  "version": "4.0.1",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@malkab",
   "author": {
@@ -29,9 +29,9 @@
     "quicktest": "npm-run-all --parallel service:nodemon:quicktest service:webpack:quicktest",
     "start": "npm-run-all --parallel service:nodemon:mocha service:webpack:mocha",
     "build": "yarn clean ; webpack --config webpack.config.js --progress",
-    "publish-tar": "yarn build ; yarn pack --filename filename.tar.gz",
-    "publish-dev": "yarn build ; yarn publish --patch --no-git-tag-version",
-    "publish-prod": "yarn build ; yarn build-docs ; yarn publish --no-git-tag-version",
+    "pub-tar": "yarn build ; yarn pack --filename filename.tar.gz",
+    "pub-dev": "yarn build ; yarn publish --patch --no-git-tag-version",
+    "pub-prod": "yarn build ; yarn build-docs ; yarn publish --no-git-tag-version",
     "build-docs": "cd typedoc ; ./html ; rm -Rf ../../docs ; cp -R build/html ../../docs ; cd ..",
     "service:nodemon:quicktest": "nodemon --ext js --watch ./build/quicktest.js --exec 'mocha ./build/quicktest.js || true'",
     "service:nodemon:mocha": "nodemon --ext js --watch ./build/mocha.js --exec 'mocha ./build/mocha.js || true'",

@@ -14,7 +14,7 @@ describe("dockerInfo", function() {
   it("dockerInfo", function() {
 
     expect(dockerInfo().hostname, "dockerInfo hostname")
-      .is.equal("node_utils_dev_");
+      .is.equal("node_utils_dev");
 
     expect(dockerInfo().containerid.length, "dockerInfo hostname")
       .is.equal(64);

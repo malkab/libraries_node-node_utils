@@ -4,18 +4,20 @@ import * as rx from "rxjs";
 
 import * as fs from 'fs-extra';
 
+export module json {
+
 /**
- *
- * Reads a JSON asynchronously.
- *
- * @param   filePathName      The path of the file to be written
- *                            inside the folder of FEE.
- * @param   json              The JSON to write.
- * @param   beautifySpaces    Set different to null to output
- *                            a beautiful JSON.
- *
- */
- export function readJson$(
+*
+* Reads a JSON asynchronously.
+*
+* @param   filePathName      The path of the file to be written
+*                            inside the folder of FEE.
+* @param   json              The JSON to write.
+* @param   beautifySpaces    Set different to null to output
+*                            a beautiful JSON.
+*
+*/
+export function readJson$(
   filePath: string[],
   { encoding = "utf8" }: { encoding?: string } = {}
 ): rx.Observable<any> {
@@ -26,10 +28,10 @@ import * as fs from 'fs-extra';
 }
 
 /**
- *
- * Reads a JSON file synchronously.
- *
- */
+*
+* Reads a JSON file synchronously.
+*
+*/
 export function readJsonSync(
   filePath: string[],
   { encoding = "utf8" }: { encoding?: string } = {}
@@ -41,17 +43,17 @@ export function readJsonSync(
 }
 
 /**
- *
- * Writes a JSON to file.
- *
- * @param   filePathName      The path of the file to be written
- *                            inside the folder of FEE.
- * @param   json              The JSON to write.
- * @param   beautifySpaces    Set different to null to output
- *                            a beautiful JSON.
- *
- */
- export function writeJson$(
+*
+* Writes a JSON to file.
+*
+* @param   filePathName      The path of the file to be written
+*                            inside the folder of FEE.
+* @param   json              The JSON to write.
+* @param   beautifySpaces    Set different to null to output
+*                            a beautiful JSON.
+*
+*/
+export function writeJson$(
   filePath: string[],
   json: any,
   {
@@ -71,15 +73,15 @@ export function readJsonSync(
 }
 
 /**
- *
- * Writes a JSON to file.
- *
- * @param   filePathName      The path of the file to be written
- *                            inside the folder of FEE.
- * @param   json              The JSON to write.
- *
- */
- export function writeJsonSync(
+*
+* Writes a JSON to file.
+*
+* @param   filePathName      The path of the file to be written
+*                            inside the folder of FEE.
+* @param   json              The JSON to write.
+*
+*/
+export function writeJsonSync(
   filePath: string[],
   json: any,
   {
@@ -95,5 +97,7 @@ export function readJsonSync(
 
   return fs.writeJSONSync(p, json,
     { encoding: encoding, spaces: spaces });
+
+}
 
 }

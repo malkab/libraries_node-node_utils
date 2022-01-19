@@ -14,14 +14,16 @@ import * as fs from 'fs-extra';
 
 import { ObjectEncodingOptions } from 'fs-extra';
 
+export module files {
+
 /**
- *
- * Deletes a file.
- *
- * @param filePath    The file path and name.
- *
- */
- export function deleteFile$(filePath: string[]): rx.Observable<boolean> {
+*
+* Deletes a file.
+*
+* @param filePath    The file path and name.
+*
+*/
+export function deleteFile$(filePath: string[]): rx.Observable<boolean> {
 
   return new rx.Observable<boolean>((o: any) => {
 
@@ -47,12 +49,12 @@ import { ObjectEncodingOptions } from 'fs-extra';
 }
 
 /**
- *
- * Deletes a file.
- *
- * @param filePath    The file path and name.
- *
- */
+*
+* Deletes a file.
+*
+* @param filePath    The file path and name.
+*
+*/
 export function deleteFileSync(...filePath: string[]): void {
 
   const p: string = path.join(...filePath);
@@ -62,12 +64,12 @@ export function deleteFileSync(...filePath: string[]): void {
 }
 
 /**
- *
- * Deletes a folder.
- *
- * @param folderPath    The file path and name.
- *
- */
+*
+* Deletes a folder.
+*
+* @param folderPath    The file path and name.
+*
+*/
 export function deleteFolder$(folderPath: string[]):
 rx.Observable<boolean> {
 
@@ -95,12 +97,12 @@ rx.Observable<boolean> {
 }
 
 /**
- *
- * Deletes a folder.
- *
- * @param folderPath    The file path and name.
- *
- */
+*
+* Deletes a folder.
+*
+* @param folderPath    The file path and name.
+*
+*/
 export function deleteFolderSync(folderPath: string[]): boolean {
 
   const p: string = path.join(...folderPath);
@@ -112,14 +114,14 @@ export function deleteFolderSync(folderPath: string[]): boolean {
 }
 
 /**
- *
- * Check path and create folder if it isn't exists, sync version.
- *
- * @param folders         The series of folders to create.
- * @returns               The full path of the created folder, or
- *                        null if it exits.
- *
- */
+*
+* Check path and create folder if it isn't exists, sync version.
+*
+* @param folders         The series of folders to create.
+* @returns               The full path of the created folder, or
+*                        null if it exits.
+*
+*/
 export function mkdir$(...folders: string[]):
 rx.Observable<string> {
 
@@ -149,14 +151,14 @@ rx.Observable<string> {
 }
 
 /**
- *
- * Check path and create folder if it isn't exists, sync version.
- *
- * @param folders         The series of folders to create.
- * @returns               The full path of the created folder, or
- *                        null if it exits.
- *
- */
+*
+* Check path and create folder if it isn't exists, sync version.
+*
+* @param folders         The series of folders to create.
+* @returns               The full path of the created folder, or
+*                        null if it exits.
+*
+*/
 export function mkdirSync(...folders: string[]): void {
 
   const p: string = path.join(...folders);
@@ -166,10 +168,10 @@ export function mkdirSync(...folders: string[]): void {
 }
 
 /**
- *
- * Duplicates a folder. Uses fs-extra.
- *
- */
+*
+* Duplicates a folder. Uses fs-extra.
+*
+*/
 export function copy$(origin: string[], destination: string[]):
 rx.Observable<string> {
 
@@ -198,10 +200,10 @@ rx.Observable<string> {
 }
 
 /**
- *
- * Duplicates a folder. Uses fs-extra.
- *
- */
+*
+* Duplicates a folder. Uses fs-extra.
+*
+*/
 export function copySync(origin: string[], destination: string[]): void {
 
   const originP: string = path.join(...origin);
@@ -212,41 +214,41 @@ export function copySync(origin: string[], destination: string[]): void {
 }
 
 /**
- *
- * Runs a 7z command. Requires an installation of 7zip in the system / Docker
- * image. 7z can be a little bit tricky to get the desired result. To ZIP the
- * contents of a folder without zipping the folder path, use the following
- * recipe:
- *
- * ```shell
- * 7z a -tzip -r path/to/zip/file.zip ./folder/to/zip/*
- * ```
- *
- * Note the beginning "./" and the "*" in the folder to ZIP path. ZIP options
- * are:
- *
- * - zipOptions: any options to pass to 7z, like -tzip -r;
- * - dotPrefix:  add the "./" to the start of the folder to ZIP path. This has
- *               to be provided explicitly because path.join drops any "./"
- *               passed as a argument.
- *
- * @param         itemsToZip              A string with the path expression of
- *                                        the items to zip. This is the
- *                                        trickiest part. No path.join is used
- *                                        here because it makes too many
- *                                        assumptions that makes 7zip usage
- *                                        difficult. Use path.join externally if
- *                                        needed.
- * @param         zipFilePathName         Path of the zip file to be created,
- *                                        also a string.
- * @param         __namedParameters       Optional options: zipFile to true to
- *                                        generate a .zip file instead of a .7z
- *                                        and recursive for recursive zipping.
- *                                        defaults to empty string.
- * @returns                               An Observable that returns the final
- *                                        path of the zipped file.
- *
- */
+*
+* Runs a 7z command. Requires an installation of 7zip in the system / Docker
+* image. 7z can be a little bit tricky to get the desired result. To ZIP the
+* contents of a folder without zipping the folder path, use the following
+* recipe:
+*
+* ```shell
+* 7z a -tzip -r path/to/zip/file.zip ./folder/to/zip/*
+* ```
+*
+* Note the beginning "./" and the "*" in the folder to ZIP path. ZIP options
+* are:
+*
+* - zipOptions: any options to pass to 7z, like -tzip -r;
+* - dotPrefix:  add the "./" to the start of the folder to ZIP path. This has
+*               to be provided explicitly because path.join drops any "./"
+*               passed as a argument.
+*
+* @param         itemsToZip              A string with the path expression of
+*                                        the items to zip. This is the
+*                                        trickiest part. No path.join is used
+*                                        here because it makes too many
+*                                        assumptions that makes 7zip usage
+*                                        difficult. Use path.join externally if
+*                                        needed.
+* @param         zipFilePathName         Path of the zip file to be created,
+*                                        also a string.
+* @param         __namedParameters       Optional options: zipFile to true to
+*                                        generate a .zip file instead of a .7z
+*                                        and recursive for recursive zipping.
+*                                        defaults to empty string.
+* @returns                               An Observable that returns the final
+*                                        path of the zipped file.
+*
+*/
 export function zip$(
   itemsToZip: string,
   zipFilePathName: string,
@@ -292,11 +294,11 @@ export function zip$(
 }
 
 /**
- *
- * Calculates the size of a single folder in bytes.
- * Divide by 1024 twice to get megabytes.
- *
- */
+*
+* Calculates the size of a single folder in bytes.
+* Divide by 1024 twice to get megabytes.
+*
+*/
 export function getFolderSize(folder: string): rx.Observable<number> {
 
   return new rx.Observable<number>((o: any) => {
@@ -322,11 +324,11 @@ export function getFolderSize(folder: string): rx.Observable<number> {
 }
 
 /**
- *
- * Outputs a report about the size of several folders, in different sizes, in
- * numerical and human readable form.
- *
- */
+*
+* Outputs a report about the size of several folders, in different sizes, in
+* numerical and human readable form.
+*
+*/
 export function getFolderSizeReport(...folder: string[]): rx.Observable<any[]> {
 
   return rx.zip(
@@ -367,16 +369,16 @@ export function getFolderSizeReport(...folder: string[]): rx.Observable<any[]> {
 }
 
 /**
- *
- * Reads a file.
- *
- * @param   filePathName
- * The path of the file to be written inside the folder of FEE.
- * @param   json              The JSON to write.
- * @param   beautifySpaces    Set different to null to output
- *                            a beautiful JSON.
- *
- */
+*
+* Reads a file.
+*
+* @param   filePathName
+* The path of the file to be written inside the folder of FEE.
+* @param   json              The JSON to write.
+* @param   beautifySpaces    Set different to null to output
+*                            a beautiful JSON.
+*
+*/
 export function readFile$(
   filePath: string[],
   { encoding = "utf8" }: { encoding?: string } = {}
@@ -388,10 +390,10 @@ export function readFile$(
 }
 
 /**
- *
- * Reads a file.
- *
- */
+*
+* Reads a file.
+*
+*/
 export function readFileSync(
   filePath: string[],
   { encoding = "utf8" }: { encoding?: ObjectEncodingOptions["encoding"] } = {}
@@ -403,16 +405,16 @@ export function readFileSync(
 }
 
 /**
- *
- * Reads a text file and return its lines.
- *
- * @param   filePathName
- * The path of the file to be written inside the folder of FEE.
- * @param   json              The JSON to write.
- * @param   beautifySpaces    Set different to null to output
- *                            a beautiful JSON.
- *
- */
+*
+* Reads a text file and return its lines.
+*
+* @param   filePathName
+* The path of the file to be written inside the folder of FEE.
+* @param   json              The JSON to write.
+* @param   beautifySpaces    Set different to null to output
+*                            a beautiful JSON.
+*
+*/
 export function readFileLines$(
   filePath: string[],
   {
@@ -444,10 +446,10 @@ export function readFileLines$(
 }
 
 /**
- *
- * Reads a text file and returns its lines.
- *
- */
+*
+* Reads a text file and returns its lines.
+*
+*/
 export function readFileLinesSync(
   filePath: string[],
   {
@@ -471,10 +473,10 @@ export function readFileLinesSync(
 }
 
 /**
- *
- * Delete contents of a folder, without removing the folder itself.
- *
- */
+*
+* Delete contents of a folder, without removing the folder itself.
+*
+*/
 export function deleteFolderContent$(folderPath: string[]):
 rx.Observable<boolean> {
 
@@ -549,5 +551,7 @@ rx.Observable<string[]> {
 export function getFolderContentSync(folderPath: string[]): string[] {
 
   return fs.readdirSync(path.join(...folderPath));
+
+}
 
 }

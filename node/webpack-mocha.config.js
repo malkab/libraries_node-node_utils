@@ -53,8 +53,8 @@ module.exports = {
   ],
 
   output: {
-    path: path.resolve(__dirname),
-    filename: "./build/[name].js",
+    filename: "[name].js",
+    path: path.resolve(__dirname, "build"),
     clean: true
   },
 

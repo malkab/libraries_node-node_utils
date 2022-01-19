@@ -8,13 +8,15 @@ import * as papaparse from "papaparse";
 
 import * as fs from 'fs-extra';
 
-import { writeTxtSync,writeTxt$ } from "./txt";
+import { txt } from "./txt";
+
+export module csv {
 
 /**
- *
- * Read a CSV with Papaparse. Check papaparse options at the papaparse page.
- *
- */
+*
+* Read a CSV with Papaparse. Check papaparse options at the papaparse page.
+*
+*/
 export function readCsvSync(filePath: string[], {
   encoding = <BufferEncoding>"utf8",
   delimiter,
@@ -197,21 +199,21 @@ export function writeCsvSync(filePath: string[], data: any, {
     columns: columns
   })
 
-  writeTxtSync(filePath, f, { encoding: encoding });
+  txt.writeTxtSync(filePath, f, { encoding: encoding });
 
 }
 
 /**
- *
- * Write a JSON to a CSV file. Check papaparse options at the papaparse page.
- *
- * @param     file    The path of the file to be written.
- * @param     data    The JSON to be written.
- * @param     config  papaparse options to write the file.
- * @returns           The path of the file written as a string.
- *
- */
- export function writeJsonAsCsv$(file: string[], data: any, {
+*
+* Write a JSON to a CSV file. Check papaparse options at the papaparse page.
+*
+* @param     file    The path of the file to be written.
+* @param     data    The JSON to be written.
+* @param     config  papaparse options to write the file.
+* @returns           The path of the file written as a string.
+*
+*/
+export function writeJsonAsCsv$(file: string[], data: any, {
   encoding = <BufferEncoding>"utf8",
   delimiter,
   quotes,
@@ -244,6 +246,8 @@ export function writeCsvSync(filePath: string[], data: any, {
     columns: columns
   })
 
-  return writeTxt$(file, f, { encoding: encoding });
+  return txt.writeTxt$(file, f, { encoding: encoding });
+
+}
 
 }

@@ -4,11 +4,13 @@ import uid from "uid-generator";
 
 import { hashSync as bcryptHash } from "bcryptjs";
 
+export module hashing {
+
 /**
- *
- * Returns an UID.
- *
- */
+*
+* Returns an UID.
+*
+*/
 export function genUid(): string {
 
   const uidgen: any = new uid(48);
@@ -17,10 +19,10 @@ export function genUid(): string {
 }
 
 /**
- *
- * Encrypt something with bcrypthash.
- *
- */
+*
+* Encrypt something with bcrypthash.
+*
+*/
 export function encrypt(item: string, size: number = 10): string {
 
   return bcryptHash(item, size);
@@ -28,27 +30,27 @@ export function encrypt(item: string, size: number = 10): string {
 }
 
 /**
- *
- * Returns as short as possible hashses without repeats for a set of strings,
- * taking into account an optional existing set of keys.
- *
- * @param values
- * Set of new values to create minihashes for.
- *
- * @param existingMiniHashes
- * Set of existing mini hashes already in the set to avoid new hashes clashes.
- *
- * @param includeExisting
- * A flag to include the existing mini hashes in the output. Existing minihashes
- * will be added to the end of the new ones.
- *
- * @param time
- * Optional use of a time seed in the hash.
- *
- * @return
- * The array of the newly created hashes, not including the
- *
- */
+*
+* Returns as short as possible hashses without repeats for a set of strings,
+* taking into account an optional existing set of keys.
+*
+* @param values
+* Set of new values to create minihashes for.
+*
+* @param existingMiniHashes
+* Set of existing mini hashes already in the set to avoid new hashes clashes.
+*
+* @param includeExisting
+* A flag to include the existing mini hashes in the output. Existing minihashes
+* will be added to the end of the new ones.
+*
+* @param time
+* Optional use of a time seed in the hash.
+*
+* @return
+* The array of the newly created hashes, not including the
+*
+*/
 export function miniHash({
     values,
     existingMiniHashes = [],
@@ -109,15 +111,15 @@ export function miniHash({
 }
 
 /**
- *
- * Returns a sha256 hash, optionally taking into account a time
- * seed to improve uniqueness.
- *
- * @param seed      The seed to produce the sha256.
- * @param time      Boolean to add Date.now() to improve uniqueness.
- * @returns         The sha256.
- *
- */
+*
+* Returns a sha256 hash, optionally taking into account a time
+* seed to improve uniqueness.
+*
+* @param seed      The seed to produce the sha256.
+* @param time      Boolean to add Date.now() to improve uniqueness.
+* @returns         The sha256.
+*
+*/
 export function sha256(seed: string, time: boolean = false): string {
 
   const mdi: md.MessageDigest = md.sha256.create();
@@ -131,5 +133,7 @@ export function sha256(seed: string, time: boolean = false): string {
   mdi.update(seed);
 
   return mdi.digest().toHex();
+
+}
 
 }

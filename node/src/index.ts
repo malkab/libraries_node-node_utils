@@ -12,8 +12,6 @@ export * from "./lib/files/txt";
 
 export * from "./lib/files/yaml";
 
-export * from "./lib/dockerinfo/idockerinfo";
-
 export * from "./lib/systemstatus/systemstatus";
 
 export * from "./lib/rxaxios/rxaxios";

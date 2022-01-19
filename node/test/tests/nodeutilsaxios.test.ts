@@ -2,7 +2,7 @@ import "mocha";
 
 import { expect } from "chai";
 
-import { rxMochaTests } from "@malkab/ts-utils";
+import { mocha } from "@malkab/ts-utils";
 
 import { axiosSaveFile$ } from "../../src/index";
 
@@ -13,7 +13,7 @@ import { axiosSaveFile$ } from "../../src/index";
  */
 describe("axiosSaveFile, no host", function() {
 
-  rxMochaTests({
+  mocha.rxMochaTests({
 
     testCaseName: "axiosSaveFilem, no host",
 
@@ -41,7 +41,7 @@ describe("axiosSaveFile, no host", function() {
 
 describe("axiosSaveFile", function() {
 
-  rxMochaTests({
+  mocha.rxMochaTests({
 
     testCaseName: "axiosSaveFile",
 
