@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, rmdirSync } from "fs";
+import { existsSync, mkdirSync, rmSync } from "fs";
 
 import * as path from "path";
 
@@ -16,6 +16,6 @@ export const exportFolder: string[] = [ "test", "tests", "nodeutilsfiles",
 *
 */
 if (existsSync(path.join(...exportFolder)))
-  rmdirSync(path.join(...exportFolder), { recursive: true });
+  rmSync(path.join(...exportFolder), { recursive: true });
 if (!existsSync(path.join(...exportFolder)))
   mkdirSync(path.join(...exportFolder));

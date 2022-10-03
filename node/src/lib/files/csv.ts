@@ -10,12 +10,26 @@ import * as fs from 'fs-extra';
 
 import { txt } from "./txt";
 
+/**
+
+  Module documentation.
+
+*/
 export module csv {
 
-/**
-*
-* Read a CSV with Papaparse. Check papaparse options at the papaparse page.
-*
+/*
+
+  Read a CSV with Papaparse. Check papaparse options at the papaparse page hdhd.
+
+  @param filePath
+  A string array with the path to the CSV file to be read.
+
+  @param options
+  Deconstructed options.
+
+  @returns
+  A Papaparse object with the data read.
+
 */
 export function readCsvSync(filePath: string[], {
   encoding = <BufferEncoding>"utf8",
@@ -36,9 +50,29 @@ export function readCsvSync(filePath: string[], {
   transform,
   delimitersToGuess,
 }: {
+  /**
+
+    File encoding, defaults to "utf8".
+
+  */
   encoding?: BufferEncoding;
+  /**
+
+    File delimiter, by default, tries to guess.
+
+  */
   delimiter?: string;
+  /**
+
+    File new line character, defaults to "\n".
+
+  */
   newline?: any;
+  /**
+
+    Quote character, by default, tries to guess.
+
+  */
   quoteChar?: string;
   escapeChar?: string;
   header?: boolean;
@@ -50,12 +84,24 @@ export function readCsvSync(filePath: string[], {
   step?: (x: any) => any;
   skipEmptyLines?: boolean;
   fastMode?: boolean;
+  /**
+
+    Function to run before getting the first chunk.
+
+    @param x
+    The parameter of the function.
+
+    @returns
+    The return of the function.
+
+  */
   beforeFirstChunk?: (x: any) => any;
   transform?: (x: any) => any;
   delimitersToGuess?: string[];
 } = {
   encoding: <BufferEncoding>"utf8",
-  newline: "\n"
+  newline: "\n",
+  header: true
 }): any {
 
   const p: string = path.join(...filePath);
@@ -84,9 +130,9 @@ export function readCsvSync(filePath: string[], {
 }
 
 /**
-*
-* Read a CSV with Papaparse. Check papaparse options at the papaparse page.
-*
+
+  Read a CSV with Papaparse. Check papaparse options at the papaparse page.
+
 */
 export function readCsv$(filePath: string[], {
   encoding = <BufferEncoding>"utf8",
@@ -162,9 +208,9 @@ return rx.from(fs.readFile(p, { encoding: encoding }))
 }
 
 /**
-*
-* Read a CSV with Papaparse. Check papaparse options at the papaparse page.
-*
+
+  Read a CSV with Papaparse. Check papaparse options at the papaparse page.
+
 */
 export function writeCsvSync(filePath: string[], data: any, {
   encoding = <BufferEncoding>"utf8",
@@ -204,14 +250,14 @@ export function writeCsvSync(filePath: string[], data: any, {
 }
 
 /**
-*
-* Write a JSON to a CSV file. Check papaparse options at the papaparse page.
-*
-* @param     file    The path of the file to be written.
-* @param     data    The JSON to be written.
-* @param     config  papaparse options to write the file.
-* @returns           The path of the file written as a string.
-*
+
+  Write a JSON to a CSV file. Check papaparse options at the papaparse page.
+
+  @param     file    The path of the file to be written.
+  @param     data    The JSON to be written.
+  @param     config  papaparse options to write the file.
+  @returns           The path of the file written as a string.
+
 */
 export function writeJsonAsCsv$(file: string[], data: any, {
   encoding = <BufferEncoding>"utf8",

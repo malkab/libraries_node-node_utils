@@ -1,6 +1,6 @@
 {
   "name": "@malkab/node-utils",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@malkab",
   "author": {
@@ -38,9 +38,6 @@
     "service:webpack:quicktest": "webpack --config webpack-quicktest.config.js --progress",
     "service:webpack:mocha": "webpack --config webpack-mocha.config.js --progress"
   },
-  "engines": {
-    "node": "^16.0.0"
-  },
   "devDependencies": {
     "@malkab/ts-utils": "^8.0.0",
     "@types/bcryptjs": "^2.4.2",
@@ -48,8 +45,8 @@
     "@types/fs-extra": "^9.0.4",
     "@types/get-folder-size": "^3.0.0",
     "@types/js-yaml": "^4.0.3",
-    "@types/mocha": "9.0.0",
-    "@types/node": "17.0.8",
+    "@types/mocha": "9.1.0",
+    "@types/node": "17.0.10",
     "@types/node-forge": "1.0.0",
     "@types/papaparse": "^5.3.0",
     "@types/uid-generator": "^2.0.2",

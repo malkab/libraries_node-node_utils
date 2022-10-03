@@ -1,3 +1,5 @@
+declare var require: any
+
 console.log(`
 
 --------------------------
