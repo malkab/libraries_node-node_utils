@@ -38,9 +38,6 @@
     "service:webpack:quicktest": "webpack --config webpack-quicktest.config.js --progress",
     "service:webpack:mocha": "webpack --config webpack-mocha.config.js --progress"
   },
-  "engines": {
-    "node": "^16.0.0"
-  },
   "devDependencies": {
     "@malkab/ts-utils": "^8.0.0",
     "@types/bcryptjs": "^2.4.2",
