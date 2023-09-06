@@ -662,11 +662,11 @@ export function readCsvSync(filePath: string[], {
     beforeFirstChunk,
     withCredentials,
     transform,
-    delimitersToGuess,
+    delimitersToGuess
   }: {
-    encoding?: BufferEncoding;
+    encoding?: any;
     delimiter?: string;
-    newline?: string;
+    newline?: any;
     quoteChar?: string;
     escapeChar?: string;
     header?: boolean;
@@ -687,14 +687,14 @@ export function readCsvSync(filePath: string[], {
     beforeFirstChunk?: (x: any) => any;
     withCredentials?: boolean;
     transform?: (x: any) => any;
-    delimitersToGuess?: papaparse.GuessableDelimiters[];
+    delimitersToGuess?: any;
 }): any {
 
   const p: string = path.join(...filePath);
 
   const f: any = fs.readFileSync(p, { encoding: encoding })
 
-  return papaparse.parse(f, {
+  return papaparse.parse(f, <papaparse.ParseConfig>{
     encoding: encoding,
     delimiter: delimiter,
     newline: newline,
@@ -752,11 +752,11 @@ export function readCsv$(filePath: string[], {
     beforeFirstChunk,
     withCredentials,
     transform,
-    delimitersToGuess,
+    delimitersToGuess
   }: {
-    encoding?: BufferEncoding;
+    encoding?: any;
     delimiter?: string;
-    newline?: string;
+    newline?: any;
     quoteChar?: string;
     escapeChar?: string;
     header?: boolean;
@@ -777,7 +777,7 @@ export function readCsv$(filePath: string[], {
     beforeFirstChunk?: (x: any) => any;
     withCredentials?: boolean;
     transform?: (x: any) => any;
-    delimitersToGuess?: papaparse.GuessableDelimiters[];
+    delimitersToGuess?: any;
 }): rx.Observable<any> {
 
   const p: string = path.join(...filePath);
@@ -785,9 +785,9 @@ export function readCsv$(filePath: string[], {
   return rx.from(fs.readFile(p, { encoding: encoding }))
   .pipe(
 
-    rxo.map((o: string): any => {
+    rxo.map((o: any): any => {
 
-      return papaparse.parse(o, {
+      return papaparse.parse(o, <papaparse.ParseConfig>{
         encoding: encoding,
         delimiter: delimiter,
         newline: newline,
