@@ -2,7 +2,7 @@ import * as rx from "rxjs";
 
 import * as rxo from "rxjs/operators";
 
-import { axios, IAxiosResponse } from "@malkab/ts-utils";
+import { axios, IAxiosResponse } from "@sunntics/ts-utils";
 
 import * as path from "path";
 

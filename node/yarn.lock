@@ -69,15 +69,6 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@malkab/ts-utils@^4.1.17":
-  version "4.1.17"
-  resolved "https://registry.yarnpkg.com/@malkab/ts-utils/-/ts-utils-4.1.17.tgz#0ee68b9d2ad3a9c85a9e7dc5864c72d3937fd0a4"
-  integrity sha512-FUvWXFBrkx3ZaHEQxNoji9C2u2SJsJIZzEmY9I8lc0LSohqznTBIrvNt6VpKMny5+qg1m7L81dRU8J58Ae9JYw==
-  dependencies:
-    axios "^0.21.0"
-    moment "^2.29.1"
-    rxjs "^7.0.0"
-
 "@npmcli/fs@^1.0.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@npmcli/fs/-/fs-1.1.1.tgz#72f719fe935e687c56a4faecf3c03d06ba593257"
@@ -93,6 +84,15 @@
   dependencies:
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
+
+"@sunntics/ts-utils@4.1.18":
+  version "4.1.18"
+  resolved "https://g023a.sunntics.com/api/packages/sunntics/npm/%40sunntics%2Fts-utils/-/4.1.18/ts-utils-4.1.18.tgz#0c20caf504ccd703297a782bdd4842b6fd144436"
+  integrity sha512-RA6K6U9bn1bZQ6jR9e4lwnO8Hy2+On2i3PQQ/ShKnS4T+JuXbaGWob3DMTgGjISXkQSXoum7V5SopQzgbBSSWA==
+  dependencies:
+    axios "^0.21.0"
+    moment "^2.29.1"
+    rxjs "^7.0.0"
 
 "@types/bcryptjs@^2.4.2":
   version "2.4.3"

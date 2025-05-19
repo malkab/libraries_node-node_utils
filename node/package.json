@@ -1,8 +1,8 @@
 {
-  "name": "@malkab/node-utils",
-  "version": "1.6.18",
+  "name": "@sunntics/node-utils",
+  "version": "1.6.20",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
-  "scope": "@malkab",
+  "scope": "@sunntics",
   "author": {
     "name": "Juan Pedro Perez Alcantara",
     "email": "jp.perez.alcantara@gmail.com",
@@ -63,7 +63,7 @@
     "webpack-node-externals": "^2.5.1"
   },
   "dependencies": {
-    "@malkab/ts-utils": "^4.1.17",
+    "@sunntics/ts-utils": "4.1.18",
     "bcryptjs": "^2.4.3",
     "fs-extra": "^9.0.1",
     "get-folder-size": "^2.0.1",
