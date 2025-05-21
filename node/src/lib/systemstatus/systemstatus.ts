@@ -1,7 +1,5 @@
 import * as nodeProcess from "process";
 
-import { roundTo } from "round-to";
-
 import * as nodeOs from "os";
 
 /**
@@ -34,39 +32,39 @@ export function nodeMemoryUsageReport() {
   return {
     rssBytes: mu.rss,
     rssBytesHuman: `${mu.rss} B`,
-    rssKBytes: roundTo(mu.rss / 1024, 2),
-    rssKBytesHuman: `${roundTo(mu.rss / 1024, 2)} KB`,
-    rssMBytes: roundTo(mu.rss / 1024 / 1024, 2),
-    rssMBytesHuman: `${roundTo(mu.rss / 1024 / 1024, 2)} MB`,
-    rssGBytes: roundTo(mu.rss / 1024 / 1024 / 1024, 2),
-    rssGBytesHuman: `${roundTo(mu.rss / 1024 / 1024 / 1024, 2)} GB`,
+    rssKBytes: Math.round(mu.rss / 1024),
+    rssKBytesHuman: `${Math.round(mu.rss / 1024)} KB`,
+    rssMBytes: Math.round(mu.rss / 1024 / 1024),
+    rssMBytesHuman: `${Math.round(mu.rss / 1024 / 1024)} MB`,
+    rssGBytes: Math.round(mu.rss / 1024 / 1024 / 1024),
+    rssGBytesHuman: `${Math.round(mu.rss / 1024 / 1024 / 1024)} GB`,
 
     heapTotalBytes: mu.heapTotal,
     heapTotalBytesHuman: `${mu.heapTotal} B`,
-    heapTotalKBytes: roundTo(mu.heapTotal / 1024, 2),
-    heapTotalKBytesHuman: `${roundTo(mu.heapTotal / 1024, 2)} KB`,
-    heapTotalMBytes: roundTo(mu.heapTotal / 1024 / 1024, 2),
-    heapTotalMBytesHuman: `${roundTo(mu.heapTotal / 1024 / 1024, 2)} MB`,
-    heapTotalGBytes: roundTo(mu.heapTotal / 1024 / 1024 / 1024, 2),
-    heapTotalGBytesHuman: `${roundTo(mu.heapTotal / 1024 / 1024 / 1024, 2)} GB`,
+    heapTotalKBytes: Math.round(mu.heapTotal / 1024),
+    heapTotalKBytesHuman: `${Math.round(mu.heapTotal / 1024)} KB`,
+    heapTotalMBytes: Math.round(mu.heapTotal / 1024 / 1024),
+    heapTotalMBytesHuman: `${Math.round(mu.heapTotal / 1024 / 1024)} MB`,
+    heapTotalGBytes: Math.round(mu.heapTotal / 1024 / 1024 / 1024),
+    heapTotalGBytesHuman: `${Math.round(mu.heapTotal / 1024 / 1024 / 1024)} GB`,
 
     heapUsedBytes: mu.heapUsed,
     heapUsedBytesHuman: `${mu.heapUsed} B`,
-    heapUsedKBytes: roundTo(mu.heapUsed / 1024, 2),
-    heapUsedKBytesHuman: `${roundTo(mu.heapUsed / 1024, 2)} KB`,
-    heapUsedMBytes: roundTo(mu.heapUsed / 1024 / 1024, 2),
-    heapUsedMBytesHuman: `${roundTo(mu.heapUsed / 1024 / 1024, 2)} MB`,
-    heapUsedGBytes: roundTo(mu.heapUsed / 1024 / 1024 / 1024, 2),
-    heapUsedGBytesHuman: `${roundTo(mu.heapUsed / 1024 / 1024 / 1024, 2)} GB`,
+    heapUsedKBytes: Math.round(mu.heapUsed / 1024),
+    heapUsedKBytesHuman: `${Math.round(mu.heapUsed / 1024)} KB`,
+    heapUsedMBytes: Math.round(mu.heapUsed / 1024 / 1024),
+    heapUsedMBytesHuman: `${Math.round(mu.heapUsed / 1024 / 1024)} MB`,
+    heapUsedGBytes: Math.round(mu.heapUsed / 1024 / 1024 / 1024),
+    heapUsedGBytesHuman: `${Math.round(mu.heapUsed / 1024 / 1024 / 1024)} GB`,
 
     externalBytes: mu.external,
     externalBytesHuman: `${mu.external} B`,
-    externalKBytes: roundTo(mu.external / 1024, 2),
-    externalKBytesHuman: `${roundTo(mu.external / 1024, 2)} KB`,
-    externalMBytes: roundTo(mu.external / 1024 / 1024, 2),
-    externalMBytesHuman: `${roundTo(mu.external / 1024 / 1024, 2)} MB`,
-    externalGBytes: roundTo(mu.external / 1024 / 1024 / 1024, 2),
-    externalGBytesHuman: `${roundTo(mu.external / 1024 / 1024 / 1024, 2)} GB`,
+    externalKBytes: Math.round(mu.external / 1024),
+    externalKBytesHuman: `${Math.round(mu.external / 1024)} KB`,
+    externalMBytes: Math.round(mu.external / 1024 / 1024),
+    externalMBytesHuman: `${Math.round(mu.external / 1024 / 1024)} MB`,
+    externalGBytes: Math.round(mu.external / 1024 / 1024 / 1024),
+    externalGBytesHuman: `${Math.round(mu.external / 1024 / 1024 / 1024)} GB`,
   }
 
 }
@@ -105,26 +103,26 @@ export function systemMemoryUsageReport() {
     usedBytes: mu.used,
     usedBytesHuman: `${mu.used} B`,
 
-    totalKBytes: roundTo(mu.total / 1024, 2),
-    totalKBytesHuman: `${roundTo(mu.total / 1024, 2)} KB`,
-    freeKBytes: roundTo(mu.free / 1024, 2),
-    freeKBytesHuman: `${roundTo(mu.free / 1024, 2)} KB`,
-    usedKBytes: roundTo(mu.used / 1024, 2),
-    usedKBytesHuman: `${roundTo(mu.used / 1024, 2)} KB`,
+    totalKBytes: Math.round(mu.total / 1024),
+    totalKBytesHuman: `${Math.round(mu.total / 1024)} KB`,
+    freeKBytes: Math.round(mu.free / 1024),
+    freeKBytesHuman: `${Math.round(mu.free / 1024)} KB`,
+    usedKBytes: Math.round(mu.used / 1024),
+    usedKBytesHuman: `${Math.round(mu.used / 1024)} KB`,
 
-    totalMBytes: roundTo(mu.total / 1024 / 1024, 2),
-    totalMBytesHuman: `${roundTo(mu.total / 1024 / 1024, 2)} MB`,
-    freeMBytes: roundTo(mu.free / 1024 / 1024, 2),
-    freeMBytesHuman: `${roundTo(mu.free / 1024 / 1024, 2)} MB`,
-    usedMBytes: roundTo(mu.used / 1024 / 1024, 2),
-    usedMBytesHuman: `${roundTo(mu.used / 1024 / 1024, 2)} MB`,
+    totalMBytes: Math.round(mu.total / 1024 / 1024),
+    totalMBytesHuman: `${Math.round(mu.total / 1024 / 1024)} MB`,
+    freeMBytes: Math.round(mu.free / 1024 / 1024),
+    freeMBytesHuman: `${Math.round(mu.free / 1024 / 1024)} MB`,
+    usedMBytes: Math.round(mu.used / 1024 / 1024),
+    usedMBytesHuman: `${Math.round(mu.used / 1024 / 1024)} MB`,
 
-    totalGBytes: roundTo(mu.total / 1024 / 1024 / 1024, 2),
-    totalGBytesHuman: `${roundTo(mu.total / 1024 / 1024 / 1024, 2)} GB`,
-    freeGBytes: roundTo(mu.free / 1024 / 1024 / 1024, 2),
-    freeGBytesHuman: `${roundTo(mu.free / 1024 / 1024 / 1024, 2)} GB`,
-    usedGBytes: roundTo(mu.used / 1024 / 1024 / 1024, 2),
-    usedGBytesHuman: `${roundTo(mu.used / 1024 / 1024 / 1024, 2)} GB`,
+    totalGBytes: Math.round(mu.total / 1024 / 1024 / 1024),
+    totalGBytesHuman: `${Math.round(mu.total / 1024 / 1024 / 1024)} GB`,
+    freeGBytes: Math.round(mu.free / 1024 / 1024 / 1024),
+    freeGBytesHuman: `${Math.round(mu.free / 1024 / 1024 / 1024)} GB`,
+    usedGBytes: Math.round(mu.used / 1024 / 1024 / 1024),
+    usedGBytesHuman: `${Math.round(mu.used / 1024 / 1024 / 1024)} GB`,
   }
 
 }
@@ -168,14 +166,12 @@ export function cpuReport() {
 
   return {
 
-    avgSpeeds: roundTo(avg(speeds), 1),
-    avgUser: roundTo(avg(userT) / 100000, 2),
-    avgNice: roundTo(avg(niceT) / 100000, 2),
-    avgSys: roundTo(avg(sysT) / 100000, 2),
-    avgIdle: roundTo(avg(idleT) / 100000, 2)
+    avgSpeeds: Math.round(avg(speeds)),
+    avgUser: Math.round(avg(userT) / 100000),
+    avgNice: Math.round(avg(niceT) / 100000),
+    avgSys: Math.round(avg(sysT) / 100000),
+    avgIdle: Math.round(avg(idleT) / 100000)
 
   }
-
-}
 
 }
