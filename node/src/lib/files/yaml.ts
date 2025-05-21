@@ -4,13 +4,13 @@ import * as rx from "rxjs";
 
 import * as fs from 'fs-extra';
 
+import { promises as fsp } from 'fs';
+
 import { ObjectEncodingOptions } from 'fs-extra';
 
 import * as jsYaml from "js-yaml";
 
 import { txt } from "../files/txt";
-
-export module yaml {
 
 /**
 *
@@ -38,7 +38,7 @@ export function readYaml$(
 
   return new rx.Observable<any>((o: any) => {
 
-    fs.readFile(p, encoding)
+    fsp.readFile(p, encoding as BufferEncoding)
       .then((a: string) => {
 
         o.next(jsYaml.load(a));
@@ -139,7 +139,5 @@ export function writeYamlSync(
 
   return txt.writeTxtSync(filePath,
     jsYaml.dump(object), { encoding: encoding });
-
-}
 
 }

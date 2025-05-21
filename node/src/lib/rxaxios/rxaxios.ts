@@ -2,18 +2,11 @@ import * as rx from "rxjs";
 
 import * as rxo from "rxjs/operators";
 
-import { axios } from "@malkab/ts-utils";
+import * as axios from "@sunntics/ts-utils";
 
 import * as path from "path";
 
 import * as fs from "fs";
-
-/**
-*
-* This module encapsulates Axios as Observables.
-*
-*/
-export module rxaxios {
 
 /**
 *
@@ -60,7 +53,5 @@ export function axiosSaveFile$({
     })
 
   )
-
-}
 
 }

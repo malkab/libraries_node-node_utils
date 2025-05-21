@@ -6,8 +6,6 @@ import * as rxo from "rxjs/operators";
 
 import * as child_process from "child_process";
 
-import { roundTo } from "round-to";
-
 import getFolderSizeFunction from "get-folder-size";
 
 import * as fs from 'fs-extra';
@@ -20,7 +18,6 @@ import { ObjectEncodingOptions } from 'fs-extra';
   sync and async versions. Async versions return observables.
 
 */
-export module files {
 
 /**
 
@@ -127,32 +124,18 @@ export function deleteFolderSync(folderPath: string[]): boolean {
                          null if it exits.
 
 */
-export function mkdir$(...folders: string[]):
-rx.Observable<string> {
-
-  // Path
+export function mkdir$(...folders: string[]): rx.Observable<string> {
   const p: string = path.join(...folders);
-
-  // Observable
   return new rx.Observable<string>((o: any) => {
-
-    fs.mkdir(p, (err: any) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
+    fs.mkdir(p)
+      .then(() => {
         o.next(p);
         o.complete();
-
-      }
-
-    })
-
-  })
-
+      })
+      .catch((err: any) => {
+        o.error(err);
+      });
+  });
 }
 
 /**
@@ -165,11 +148,8 @@ rx.Observable<string> {
 
 */
 export function mkdirSync(...folders: string[]): void {
-
   const p: string = path.join(...folders);
-
   fs.mkdirSync(p);
-
 }
 
 /**
@@ -387,12 +367,12 @@ export function getFolderSizeReport(...folder: string[]): rx.Observable<any[]> {
           folder: folder[i],
           sizeBytes: x,
           sizeBytesHuman: `${x} B`,
-          sizeKBytes: roundTo(x / 1024, 2),
-          sizeKBytesHuman: `${roundTo(x / 1024, 2)} KB`,
-          sizeMBytes: roundTo(x / 1024 / 1024, 2),
-          sizeMBytesHuman: `${roundTo(x / 1024 / 1024, 2)} MB`,
-          sizeGBytes: roundTo(x / 1024 / 1024 / 1024, 2),
-          sizeGBytesHuman: `${roundTo(x / 1024 / 1024 / 1024, 2)} GB`,
+          sizeKBytes: Math.round(x / 1024),
+          sizeKBytesHuman: `${Math.round(x / 1024)} KB`,
+          sizeMBytes: Math.round(x / 1024 / 1024),
+          sizeMBytesHuman: `${Math.round(x / 1024 / 1024)} MB`,
+          sizeGBytes: Math.round(x / 1024 / 1024 / 1024),
+          sizeGBytesHuman: `${Math.round(x / 1024 / 1024 / 1024)} GB`,
         }
 
       })
@@ -418,10 +398,8 @@ export function readFile$(
   filePath: string[],
   { encoding = "utf8" }: { encoding?: string } = {}
 ): rx.Observable<any> {
-
   const p: string = path.join(...filePath);
-  return rx.from(fs.readFile(p, { encoding: encoding }));
-
+  return rx.from(fs.readFile(p, encoding as BufferEncoding));
 }
 
 /**
@@ -462,22 +440,16 @@ export function readFileLines$(
     trim?: boolean;
   } = {}
 ): rx.Observable<string[]> {
-
   const p: string = path.join(...filePath);
-  return rx.from(fs.readFile(p, { encoding: encoding }))
-  .pipe(
-
-    rxo.map((o: string) => {
-
-      let out: string[] = o.split("\n");
-      if (trim) { out = out.map((o: string) => o.trim()) };
-      if (cleanEmptyLines) { out = out.filter((l: string) => l !== "") };
-      return out;
-
-    })
-
-  );
-
+  return rx.from(fs.readFile(p, encoding as BufferEncoding))
+    .pipe(
+      rxo.map((o: string) => {
+        let out: string[] = o.split("\n");
+        if (trim) { out = out.map((o: string) => o.trim()) };
+        if (cleanEmptyLines) { out = out.filter((l: string) => l !== "") };
+        return out;
+      })
+    );
 }
 
 /**
@@ -560,28 +532,17 @@ export function deleteFolderContentSync(folderPath: string[]): boolean {
   An observable with the contents of the folder as a string array.
 
 */
-export function getFolderContent$(folderPath: string[]):
-rx.Observable<string[]> {
-
-   return new rx.Observable<string[]>((o: any) => {
-
-     fs.readdir(path.join(...folderPath), (err: any, files: string[]) => {
-
-       if (err) {
-
-         o.error(err);
-
-       } else {
-
-         o.next(files);
-         o.complete();
-
-       }
-
-     });
-
-   })
-
+export function getFolderContent$(folderPath: string[]): rx.Observable<string[]> {
+  return new rx.Observable<string[]>((o: any) => {
+    fs.readdir(path.join(...folderPath))
+      .then((files: string[]) => {
+        o.next(files);
+        o.complete();
+      })
+      .catch((err: any) => {
+        o.error(err);
+      });
+  });
 }
 
 /**
@@ -596,9 +557,5 @@ rx.Observable<string[]> {
 
 */
 export function getFolderContentSync(folderPath: string[]): string[] {
-
   return fs.readdirSync(path.join(...folderPath));
-
-}
-
 }

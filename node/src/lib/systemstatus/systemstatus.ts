@@ -3,13 +3,6 @@ import * as nodeProcess from "process";
 import * as nodeOs from "os";
 
 /**
- *
- * System status utils.
- *
- */
-export module systemstatus {
-
-/**
 *
 * Returns Node memory usage, crude.
 *
