@@ -2,7 +2,7 @@ import * as rx from "rxjs";
 
 import * as rxo from "rxjs/operators";
 
-import { axios, IAxiosResponse } from "@sunntics/ts-utils";
+import { IAxiosResponse, axiosGet$, ERESPONSETYPE } from "@sunntics/ts-utils";
 
 import * as path from "path";
 
@@ -41,11 +41,13 @@ export function axiosSaveFile({
     filePath: string[];
 }): rx.Observable<IAxiosResponse> {
 
-  return axios({
-    method: "get",
-    url: url,
-    responseType: "stream"
-  })
+  return axiosGet$(
+    filePath.join("/"),
+    {
+      baseUrl: url,
+      responseType: ERESPONSETYPE.stream
+    }
+  )
   .pipe(
 
     rxo.map((response: any) => {

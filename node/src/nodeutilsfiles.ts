@@ -6,15 +6,19 @@ import * as rxo from "rxjs/operators";
 
 import * as child_process from "child_process";
 
-import roundTo from "round-to";
-
 import getFolderSizeFunction from "get-folder-size";
 
 import * as papaparse from "papaparse";
 
-import * as fs from 'fs-extra';
+import * as fs from "fs-extra";
 
-import { BaseEncodingOptions } from 'fs-extra';
+import {
+    writeFileSync,
+    readFileSync as rfs,
+    unlinkSync,
+    rmSync,
+    readdirSync
+} from "fs";
 
 /**
  *
@@ -35,30 +39,9 @@ import { BaseEncodingOptions } from 'fs-extra';
 export function writeTxt$(
   filePath: string[],
   txt: any,
-  { encoding = "utf8" }: { encoding?: fs.BaseEncodingOptions["encoding"]; } = {}
-): rx.Observable<string> {
-
-  return new rx.Observable<string>((o: any) => {
-
-    const p: string = path.join(...filePath);
-
-    fs.writeFile(p, txt, { encoding: encoding }, (err: any) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
-        o.next(p);
-        o.complete();
-
-      }
-
-    });
-
-  });
-
+  { encoding = "utf8" }: { encoding?: BufferEncoding; } = {}
+): rx.Observable<void> {
+    return rx.from(fs.writeFile(path.join(...filePath), txt, { encoding: encoding }))
 }
 
 /**
@@ -75,12 +58,12 @@ export function writeTxt$(
 export function writeTxtSync(
   filePath: string[],
   txt: string,
-  { encoding = "utf8" }: { encoding?: fs.BaseEncodingOptions["encoding"]; } = {}
+  { encoding = "utf8" }: { encoding?: BufferEncoding; } = {}
 ): void {
 
   const p: string = path.join(...filePath);
 
-  fs.writeFileSync(p, txt, { encoding: encoding });
+  writeFileSync(p, txt, { encoding: encoding });
 
 }
 
@@ -97,11 +80,21 @@ export function writeTxtSync(
  */
 export function readJson$(
   filePath: string[],
-  { encoding = "utf8" }: { encoding?: string } = {}
+  { encoding = "utf8" }: { encoding?: BufferEncoding } = {}
 ): rx.Observable<any> {
 
   const p: string = path.join(...filePath);
-  return rx.from(fs.readJSON(p, { encoding: encoding }));
+
+  return rx.from(fs.readFile(p, { encoding: encoding }))
+  .pipe(
+
+    rxo.map((o: string) => {
+
+      return JSON.parse(o);
+
+    })
+
+  );
 
 }
 
@@ -112,11 +105,14 @@ export function readJson$(
  */
 export function readJsonSync(
   filePath: string[],
-  { encoding = "utf8" }: { encoding?: string } = {}
+  { encoding = "utf8" }: { encoding?: BufferEncoding } = {}
 ): any {
 
   const p: string = path.join(...filePath);
-  return fs.readJSONSync(p, { encoding: encoding });
+
+  const fileContent: string = rfs(p, { encoding: encoding });
+
+  return JSON.parse(fileContent);
 
 }
 
@@ -133,7 +129,7 @@ export function readJsonSync(
  */
 export function readFile$(
   filePath: string[],
-  { encoding = "utf8" }: { encoding?: string } = {}
+  { encoding = "utf8" }: { encoding?: BufferEncoding } = {}
 ): rx.Observable<any> {
 
   const p: string = path.join(...filePath);
@@ -148,12 +144,10 @@ export function readFile$(
  */
 export function readFileSync(
   filePath: string[],
-  { encoding = "utf8" }: { encoding?: BaseEncodingOptions["encoding"] } = {}
+  { encoding = "utf8" }: { encoding?: BufferEncoding } = {}
 ): any {
-
   const p: string = path.join(...filePath);
-  return fs.readFileSync(p, { encoding: encoding });
-
+  return rfs(p, { encoding: encoding });
 }
 
 /**
@@ -174,7 +168,7 @@ export function readFileLines$(
     cleanEmptyLines = true,
     trim = true
   }: {
-    encoding?: string;
+    encoding?: BufferEncoding;
     cleanEmptyLines?: boolean;
     trim?: boolean;
   } = {}
@@ -209,14 +203,14 @@ export function readFileLinesSync(
     cleanEmptyLines = true,
     trim = true
   }: {
-    encoding?: BaseEncodingOptions["encoding"];
+    encoding?: BufferEncoding;
     cleanEmptyLines?: boolean;
     trim?: boolean;
   } = {}
 ): string[] {
 
   const p: string = path.join(...filePath);
-  const f: string = <string>fs.readFileSync(p, { encoding: encoding });
+  const f: string = <string>rfs(p, { encoding: encoding });
   let out: string[] = f.split("\n");
   if (trim) { out = out.map((o: string) => o.trim()) };
   if (cleanEmptyLines) { out = out.filter((l: string) => l !== "") };
@@ -242,15 +236,18 @@ export function writeJson$(
     encoding = "utf8",
     spaces
   }: {
-    encoding?: string;
+    encoding?: BufferEncoding;
     spaces?: number;
   } = {}
 ): rx.Observable<void> {
 
-  const p: string = path.join(...filePath);
+    const p: string = path.join(...filePath);
 
-  return rx.from(fs.writeJSON(p, json,
-    { encoding: encoding, spaces: spaces }));
+    // Convert the JSON to a string
+    const jsonS: string = JSON.stringify(json, null, spaces);
+
+    return rx.from(fs.writeFile(p, jsonS,
+        { encoding: encoding }));
 
 }
 
@@ -270,15 +267,18 @@ export function writeJsonSync(
     encoding = "utf8",
     spaces
   }: {
-    encoding?: string;
+    encoding?: BufferEncoding;
     spaces?: number;
   } = {}
 ): void {
 
-  const p: string = path.join(...filePath);
+    const p: string = path.join(...filePath);
 
-  return fs.writeJSONSync(p, json,
-    { encoding: encoding, spaces: spaces });
+    // Convert the JSON to a string
+    const jsonS: string = JSON.stringify(json, null, spaces);
+
+    return writeFileSync(p, json,
+        { encoding: encoding });
 
 }
 
@@ -289,29 +289,8 @@ export function writeJsonSync(
  * @param filePath    The file path and name.
  *
  */
-export function deleteFile$(filePath: string[]): rx.Observable<boolean> {
-
-  return new rx.Observable<boolean>((o: any) => {
-
-    const p: string = path.join(...filePath);
-
-    fs.unlink(p, (err: any) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
-        o.next(true);
-        o.complete();
-
-      }
-
-    });
-
-  });
-
+export function deleteFile$(filePath: string[]): rx.Observable<void> {
+    return rx.from(fs.unlink(path.join(...filePath)))
 }
 
 /**
@@ -322,11 +301,8 @@ export function deleteFile$(filePath: string[]): rx.Observable<boolean> {
  *
  */
 export function deleteFileSync(...filePath: string[]): void {
-
   const p: string = path.join(...filePath);
-
-  fs.unlinkSync(p);
-
+  unlinkSync(p);
 }
 
 /**
@@ -338,27 +314,17 @@ export function deleteFileSync(...filePath: string[]): void {
  */
 export function deleteFolder$(folderPath: string[]):
 rx.Observable<boolean> {
-
-  return new rx.Observable<boolean>((o: any) => {
-
-    const p: string = path.join(...folderPath);
-
-    fs.remove(p, (err: any) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
-        o.next(true);
-        o.complete();
-
-      }
-
+    return new rx.Observable<boolean>((observer: any) => {
+        const p: string = path.join(...folderPath);
+        fs.rm(p, { recursive: true, force: true })
+            .then(() => {
+                observer.next(true);
+                observer.complete();
+            })
+            .catch((err: any) => {
+                observer.error(err);
+            });
     });
-
-  });
 
 }
 
@@ -370,13 +336,9 @@ rx.Observable<boolean> {
  *
  */
 export function deleteFolderSync(folderPath: string[]): boolean {
-
   const p: string = path.join(...folderPath);
-
-  fs.removeSync(p);
-
+  rmSync(p, { recursive: true, force: true });
   return true;
-
 }
 
 /**
@@ -390,30 +352,17 @@ export function deleteFolderSync(folderPath: string[]): boolean {
  */
 export function mkdir$(...folders: string[]):
 rx.Observable<string> {
-
-  // Path
   const p: string = path.join(...folders);
-
-  // Observable
   return new rx.Observable<string>((o: any) => {
-
-    fs.mkdir(p, (err: any) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
+    fs.mkdir(p)
+      .then(() => {
         o.next(p);
         o.complete();
-
-      }
-
-    })
-
+      })
+      .catch((err: any) => {
+        o.error(err);
+      });
   })
-
 }
 
 /**
@@ -426,11 +375,8 @@ rx.Observable<string> {
  *
  */
 export function mkdirSync(...folders: string[]): void {
-
   const p: string = path.join(...folders);
-
   fs.mkdirSync(p);
-
 }
 
 /**
@@ -440,29 +386,18 @@ export function mkdirSync(...folders: string[]): void {
  */
 export function copy$(origin: string[], destination: string[]):
 rx.Observable<string> {
-
   return new rx.Observable<string>((o: any) => {
-
     const originP: string = path.join(...origin);
     const destinationP: string = path.join(...destination);
-
-    fs.copy(originP, destinationP, (err: any) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
+    fs.copy(originP, destinationP)
+      .then(() => {
         o.next(destinationP);
         o.complete();
-
-      }
-
-    });
-
+      })
+      .catch((err: any) => {
+        o.error(err);
+      });
   })
-
 }
 
 /**
@@ -471,12 +406,9 @@ rx.Observable<string> {
  *
  */
 export function copySync(origin: string[], destination: string[]): void {
-
   const originP: string = path.join(...origin);
   const destinationP: string = path.join(...destination);
-
   fs.copySync(originP, destinationP);
-
 }
 
 /**
@@ -569,21 +501,14 @@ export function getFolderSize(folder: string): rx.Observable<number> {
 
   return new rx.Observable<number>((o: any) => {
 
-    getFolderSizeFunction(folder, (err: Error | null, size: number) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
-        o.next(size);
+    getFolderSizeFunction(folder)
+      .then((result: { size: number }) => {
+        o.next(result.size);
         o.complete();
-
-      }
-
-    })
-
+      })
+      .catch((err: Error) => {
+        o.error(err);
+      });
   })
 
 }
@@ -617,12 +542,12 @@ export function getFolderSizeReport(...folder: string[]): rx.Observable<any[]> {
           folder: folder[i],
           sizeBytes: x,
           sizeBytesHuman: `${x} B`,
-          sizeKBytes: roundTo(x / 1024, 2),
-          sizeKBytesHuman: `${roundTo(x / 1024, 2)} KB`,
-          sizeMBytes: roundTo(x / 1024 / 1024, 2),
-          sizeMBytesHuman: `${roundTo(x / 1024 / 1024, 2)} MB`,
-          sizeGBytes: roundTo(x / 1024 / 1024 / 1024, 2),
-          sizeGBytesHuman: `${roundTo(x / 1024 / 1024 / 1024, 2)} GB`,
+          sizeKBytes: Math.round(x / 1024),
+          sizeKBytesHuman: `${Math.round(x / 1024)} KB`,
+          sizeMBytes: Math.round(x / 1024 / 1024),
+          sizeMBytesHuman: `${Math.round(x / 1024 / 1024)} MB`,
+          sizeGBytes: Math.round(x / 1024 / 1024 / 1024),
+          sizeGBytesHuman: `${Math.round(x / 1024 / 1024 / 1024)} GB`,
         }
 
       })
@@ -638,89 +563,10 @@ export function getFolderSizeReport(...folder: string[]): rx.Observable<any[]> {
  * Read a CSV with Papaparse. Check papaparse options at the papaparse page.
  *
  */
-export function readCsvSync(filePath: string[], {
-    encoding = <BufferEncoding>"utf8",
-    delimiter,
-    newline,
-    quoteChar,
-    escapeChar,
-    header,
-    transformHeader,
-    dynamicTyping,
-    preview,
-    worker,
-    comments,
-    complete,
-    step,
-    error,
-    download,
-    downloadRequestHeaders,
-    skipEmptyLines,
-    chunk,
-    chunkSize,
-    fastMode,
-    beforeFirstChunk,
-    withCredentials,
-    transform,
-    delimitersToGuess
-  }: {
-    encoding?: any;
-    delimiter?: string;
-    newline?: any;
-    quoteChar?: string;
-    escapeChar?: string;
-    header?: boolean;
-    transformHeader?: (x: any) => any;
-    dynamicTyping?: boolean;
-    preview?: number;
-    worker?: boolean;
-    comments?: string;
-    complete?: (x: any) => any;
-    step?: (x: any) => any;
-    error?: (x: papaparse.ParseError, f: any) => any;
-    download?: boolean;
-    downloadRequestHeaders?: any;
-    skipEmptyLines?: boolean;
-    chunk?: (x: any) => any;
-    chunkSize?: any;
-    fastMode?: boolean;
-    beforeFirstChunk?: (x: any) => any;
-    withCredentials?: boolean;
-    transform?: (x: any) => any;
-    delimitersToGuess?: any;
-}): any {
-
+export function readCsvSync(filePath: string[], options: any): any {
   const p: string = path.join(...filePath);
-
-  const f: any = fs.readFileSync(p, { encoding: encoding })
-
-  return papaparse.parse(f, <papaparse.ParseConfig>{
-    encoding: encoding,
-    delimiter: delimiter,
-    newline: newline,
-    quoteChar: quoteChar,
-    escapeChar: escapeChar,
-    header: header,
-    transformHeader: transformHeader,
-    dynamicTyping: dynamicTyping,
-    preview: preview,
-    worker: worker,
-    comments: comments,
-    complete: complete,
-    step: step,
-    error: error,
-    download: download,
-    downloadRequestHeaders: downloadRequestHeaders,
-    skipEmptyLines: skipEmptyLines,
-    chunk: chunk,
-    chunkSize: chunkSize,
-    fastMode: fastMode,
-    beforeFirstChunk: beforeFirstChunk,
-    withCredentials: withCredentials,
-    transform: transform,
-    delimitersToGuess: delimitersToGuess
-  })
-
+  const f: any = rfs(p, { encoding: options.encoding || "utf8" })
+  return papaparse.parse(f, <papaparse.ParseConfig>options)
 }
 
 /**
@@ -890,7 +736,6 @@ export function writeCsv$(file: string[], data: any, {
     skipEmptyLines?: boolean;
     columns?: undefined | string[];
 } = {}): rx.Observable<string> {
-
   const f: string = papaparse.unparse(data, {
     delimiter: delimiter,
     quotes: quotes,
@@ -901,9 +746,9 @@ export function writeCsv$(file: string[], data: any, {
     skipEmptyLines: skipEmptyLines,
     columns: columns
   })
-
-  return writeTxt$(file, f, { encoding: encoding });
-
+  return writeTxt$(file, f, { encoding: encoding }).pipe(
+    rxo.map(() => path.join(...file))
+  );
 }
 
 /**
@@ -913,22 +758,15 @@ export function writeCsv$(file: string[], data: any, {
  */
 export function deleteFolderContent$(folderPath: string[]):
 rx.Observable<boolean> {
-
   return getFolderContent$(folderPath)
   .pipe(
-
     rxo.concatMap((o: string[]) => {
-
       return rx.zip(
         ...o.map((o: string) => fs.remove(path.join(...folderPath, o)))
       );
-
     }),
-
     rxo.map((o: any) => true)
-
   )
-
 }
 
 /**
@@ -937,15 +775,10 @@ rx.Observable<boolean> {
  *
  */
 export function deleteFolderContentSync(folderPath: string[]): boolean {
-
   getFolderContentSync(folderPath).map((o: string) => {
-
     fs.removeSync(path.join(...folderPath, o))
-
   })
-
   return true;
-
 }
 
 /**
@@ -955,26 +788,16 @@ export function deleteFolderContentSync(folderPath: string[]): boolean {
  */
 export function getFolderContent$(folderPath: string[]):
 rx.Observable<string[]> {
-
   return new rx.Observable<any>((o: any) => {
-
-    fs.readdir(path.join(...folderPath), (err: any, files: string[]) => {
-
-      if (err) {
-
-        o.error(err);
-
-      } else {
-
+    fs.readdir(path.join(...folderPath))
+      .then((files: string[]) => {
         o.next(files);
         o.complete();
-
-      }
-
-    });
-
+      })
+      .catch((err: any) => {
+        o.error(err);
+      });
   })
-
 }
 
 /**
@@ -983,7 +806,5 @@ rx.Observable<string[]> {
  *
  */
 export function getFolderContentSync(folderPath: string[]): string[] {
-
-  return fs.readdirSync(path.join(...folderPath));
-
+  return readdirSync(path.join(...folderPath));
 }
