@@ -10,7 +10,7 @@ import { ObjectEncodingOptions } from 'fs-extra';
 
 import * as jsYaml from "js-yaml";
 
-import { txt } from "../files/txt";
+import * as txt from "../files/txt";
 
 /**
 *

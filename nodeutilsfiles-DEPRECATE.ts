@@ -69,37 +69,6 @@ export function writeTxtSync(
 
 /**
  *
- * Writes a JSON to file.
- *
- * @param   filePathName      The path of the file to be written
- *                            inside the folder of FEE.
- * @param   json              The JSON to write.
- * @param   beautifySpaces    Set different to null to output
- *                            a beautiful JSON.
- *
- */
-export function readJson$(
-  filePath: string[],
-  { encoding = "utf8" }: { encoding?: BufferEncoding } = {}
-): rx.Observable<any> {
-
-  const p: string = path.join(...filePath);
-
-  return rx.from(fs.readFile(p, { encoding: encoding }))
-  .pipe(
-
-    rxo.map((o: string) => {
-
-      return JSON.parse(o);
-
-    })
-
-  );
-
-}
-
-/**
- *
  * Reads a JSON file.
  *
  */

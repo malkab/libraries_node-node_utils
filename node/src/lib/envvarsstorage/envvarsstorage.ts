@@ -4,8 +4,6 @@
  * are initialised from env vars.
  *
  */
-export module envvarsstorage {
-
 export class EnvVarsStorage {
 
   // The storage
@@ -47,7 +45,5 @@ export class EnvVarsStorage {
     });
 
   }
-
-}
 
 }

@@ -1,7 +1,5 @@
 import * as child_process from "child_process";
 
-export module dockerinfo {
-
 /**
 *
 * This namespace contains functions meant to be run inside a Docker
@@ -56,7 +54,5 @@ export function dockerInfo(): IDockerInfo {
   };
 
   return out;
-
-}
 
 }

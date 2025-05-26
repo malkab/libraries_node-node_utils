@@ -4,8 +4,6 @@ import * as rx from "rxjs";
 
 import * as fs from 'fs-extra';
 
-export module txt {
-
 /**
 *
 * Writes a string to file asynchroneously.
@@ -84,7 +82,5 @@ export function writeTxtSync(
   fs.writeFileSync(p, txt, { encoding: encoding });
 
   return p;
-
-}
 
 }

@@ -1,6 +1,6 @@
 {
   "name": "@sunntics/node-utils",
-  "version": "1.6.51",
+  "version": "1.6.52",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@sunntics",
   "author": {
@@ -62,7 +62,7 @@
     "webpack-node-externals": "3.0.0"
   },
   "dependencies": {
-    "@sunntics/ts-utils": "8.0.11",
+    "@sunntics/ts-utils": "8.0.12",
     "bcryptjs": "3.0.2",
     "fs-extra": "11.3.0",
     "get-folder-size": "5.0.0",

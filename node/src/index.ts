@@ -18,6 +18,4 @@ export * from "./lib/rxaxios/rxaxios";
 
 export * from "./lib/envvarsstorage/envvarsstorage";
 
-export * from "./nodeutilsfiles";
-
 export * from "./nodeutilsaxios";

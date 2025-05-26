@@ -8,14 +8,13 @@ import * as papaparse from "papaparse";
 
 import * as fs from 'fs-extra';
 
-import { txt } from "./txt";
+import * as txt from "./txt";
 
 /**
 
   Module documentation.
 
 */
-export module csv {
 
 /*
 
@@ -293,7 +292,5 @@ export function writeJsonAsCsv$(file: string[], data: any, {
   })
 
   return txt.writeTxt$(file, f, { encoding: encoding });
-
-}
 
 }

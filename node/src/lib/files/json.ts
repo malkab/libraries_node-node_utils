@@ -4,8 +4,6 @@ import * as rx from "rxjs";
 
 import * as fs from 'fs-extra';
 
-export module json {
-
 /**
 *
 * Reads a JSON asynchronously.
@@ -97,7 +95,5 @@ export function writeJsonSync(
 
   return fs.writeJSONSync(p, json,
     { encoding: encoding, spaces: spaces });
-
-}
 
 }

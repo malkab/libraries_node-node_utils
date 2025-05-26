@@ -62,10 +62,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@sunntics/ts-utils@8.0.11":
-  version "8.0.11"
-  resolved "https://g023a.sunntics.com/api/packages/sunntics/npm/%40sunntics%2Fts-utils/-/8.0.11/ts-utils-8.0.11.tgz#4cad0cf0f1354d37ab65d517686096c351860a96"
-  integrity sha512-gA0X+YGe9pkqg7bItQLwpZE0sewhJ/MlYVWyhig6oGiy/cIKgBMZER3hFY0bT8+7Uotwdzz7+hctpyeSGlmW5w==
+"@sunntics/ts-utils@8.0.12":
+  version "8.0.12"
+  resolved "https://g023a.sunntics.com/api/packages/sunntics/npm/%40sunntics%2Fts-utils/-/8.0.12/ts-utils-8.0.12.tgz#d6b558fe9d7afc4e3978024fbcb0899394c4df35"
+  integrity sha512-GuXYbrjFcE86vQGKEgqTZT6igZy91hQVReGkrtTmI3kj6xMrL6IfLSNxfFRn05lBhux3R8SPQCswhSvT4tbGbg==
   dependencies:
     axios "1.9.0"
     moment "2.30.1"
