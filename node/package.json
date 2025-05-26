@@ -1,6 +1,6 @@
 {
   "name": "@sunntics/node-utils",
-  "version": "1.6.52",
+  "version": "1.6.53",
   "description": "TypeScript for Node utilities, small functions highly reusable.",
   "scope": "@sunntics",
   "author": {

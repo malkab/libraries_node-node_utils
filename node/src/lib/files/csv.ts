@@ -294,3 +294,46 @@ export function writeJsonAsCsv$(file: string[], data: any, {
   return txt.writeTxt$(file, f, { encoding: encoding });
 
 }
+
+/**
+ *
+ * Read a CSV with Papaparse. Check papaparse options at the papaparse page.
+ *
+ * @returns           The path of the file written as a string.
+ *
+ */
+export function writeCsv$(file: string[], data: any, {
+    encoding = <BufferEncoding>"utf8",
+    delimiter,
+    quotes,
+    quoteChar,
+    escapeChar,
+    header,
+    newline,
+    skipEmptyLines,
+    columns
+  }: {
+    encoding?: BufferEncoding;
+    delimiter?: string;
+    quotes?: boolean | boolean[];
+    quoteChar?: string;
+    escapeChar?: string;
+    header?: boolean;
+    newline?: string;
+    skipEmptyLines?: boolean;
+    columns?: undefined | string[];
+} = {}): rx.Observable<string> {
+  const f: string = papaparse.unparse(data, {
+    delimiter: delimiter,
+    quotes: quotes,
+    quoteChar: quoteChar,
+    escapeChar: escapeChar,
+    header: header,
+    newline: newline,
+    skipEmptyLines: skipEmptyLines,
+    columns: columns
+  })
+  return txt.writeTxt$(file, f, { encoding: encoding }).pipe(
+    rxo.map(() => path.join(...file))
+  );
+}
