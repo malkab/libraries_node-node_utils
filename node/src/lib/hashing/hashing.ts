@@ -4,8 +4,6 @@ import uid from "uid-generator";
 
 import { hashSync as bcryptHash } from "bcryptjs";
 
-export module hashing {
-
 /**
 *
 * Returns an UID.
@@ -133,7 +131,5 @@ export function sha256(seed: string, time: boolean = false): string {
   mdi.update(seed);
 
   return mdi.digest().toHex();
-
-}
 
 }
